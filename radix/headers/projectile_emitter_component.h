@@ -2,8 +2,8 @@
 #define PROJECTILE_EMITTER_COMPONENT
 
 #include "entity_manager.h"
-#include "../lib/glm/glm.hpp"
 #include "transform_component.h"
+#include "../include/glm/glm.hpp"
 
 namespace Radix
 {
