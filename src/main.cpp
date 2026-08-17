@@ -2,16 +2,16 @@
 
 int main(int argc, char* args[])
 {
-	Radix::Game game;
+	radix::Game game;
 
-	while(game.Running() == true)
+	while(game.is_running() == true)
 	{
-		game.Input();
-		game.Update();
-		game.Render();
+		game.input();
+		game.update();
+		game.render();
 	}
 
-	game.Destroy();
+	game.destroy();
 
 	return 0;
 }

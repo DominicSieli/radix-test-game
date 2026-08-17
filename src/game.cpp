@@ -14,7 +14,7 @@
 #include "../radix/headers/text_label_component.h"
 #include "../radix/headers/projectile_emitter_component.h"
 
-namespace Radix
+namespace radix
 {
 	Map* map;
 	SDL_Event Game::event;
@@ -53,7 +53,7 @@ namespace Radix
 			return;
 		}
 
-		LoadLevel(0);
+		load_level(0);
 
 		this->running = true;
 		return;
@@ -62,59 +62,59 @@ namespace Radix
 	Game::~Game()
 	{}
 
-	bool Game::Running() const
+	bool Game::is_running() const
 	{
 		return this->running;
 	}
 
-	Entity& player(entity_manager.AddEntity("player", PLAYER));
+	Entity& player(entity_manager.add_entity("player", PLAYER));
 
-	void Game::LoadLevel(int level_number)
+	void Game::load_level(int level_number)
 	{
-		asset_manager->AddFont("charriot-font", std::string("./assets/fonts/charriot.ttf").c_str(), 24);
-		asset_manager->AddTexture("tank-image", std::string("./assets/images/tank-big-right.png").c_str());
-		asset_manager->AddTexture("chopper-image", std::string("./assets/images/chopper-spritesheet.png").c_str());
-		asset_manager->AddTexture("radar-image", std::string("./assets/images/radar.png").c_str());
-		asset_manager->AddTexture("heliport-image", std::string("./assets/images/heliport.png").c_str());
-		asset_manager->AddTexture("jungle-tiletexture", std::string("./assets/tilemaps/jungle.png").c_str());
-		asset_manager->AddTexture("projectile-image", std::string("./assets/images/bullet-enemy.png").c_str());
+		asset_manager->add_font("charriot-font", std::string("./assets/fonts/charriot.ttf").c_str(), 24);
+		asset_manager->add_texture("tank-image", std::string("./assets/images/tank-big-right.png").c_str());
+		asset_manager->add_texture("chopper-image", std::string("./assets/images/chopper-spritesheet.png").c_str());
+		asset_manager->add_texture("radar-image", std::string("./assets/images/radar.png").c_str());
+		asset_manager->add_texture("heliport-image", std::string("./assets/images/heliport.png").c_str());
+		asset_manager->add_texture("jungle-tiletexture", std::string("./assets/tilemaps/jungle.png").c_str());
+		asset_manager->add_texture("projectile-image", std::string("./assets/images/bullet-enemy.png").c_str());
 
 		map = new Map("jungle-tiletexture", 2, 32);
-		map->LoadMap("./assets/tilemaps/jungle.map", 25, 20);
+		map->load_map("./assets/tilemaps/jungle.map", 25, 20);
 
-		Entity& label_level_name(entity_manager.AddEntity("LabelLevelName", UI));
-		label_level_name.AddComponent<TextLabelComponent>(10, 10, "Level: 1", "charriot-font", WHITE);
+		Entity& label_level_name(entity_manager.add_entity("LabelLevelName", UI));
+		label_level_name.add_component<TextLabelComponent>(10, 10, "Level: 1", "charriot-font", WHITE);
 
-		player.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
-		player.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
-		player.AddComponent<KeyboardComponent>("up", "down", "left", "right", "space");
-		player.AddComponent<ColliderComponent>("PLAYER", 240, 106, 32, 32);
+		player.add_component<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
+		player.add_component<SpriteComponent>("chopper-image", 2, 90, true, false);
+		player.add_component<KeyboardComponent>("up", "down", "left", "right", "space");
+		player.add_component<ColliderComponent>("PLAYER", 240, 106, 32, 32);
 
-		Entity& tank(entity_manager.AddEntity("tank", ENEMY));
-		tank.AddComponent<TransformComponent>(250, 495, 5, 0, 32, 32, 1);
-		tank.AddComponent<SpriteComponent>("tank-image");
-		tank.AddComponent<ColliderComponent>("ENEMY", 150, 495, 32, 32);
+		Entity& tank(entity_manager.add_entity("tank", ENEMY));
+		tank.add_component<TransformComponent>(250, 495, 5, 0, 32, 32, 1);
+		tank.add_component<SpriteComponent>("tank-image");
+		tank.add_component<ColliderComponent>("ENEMY", 150, 495, 32, 32);
 
-		TransformComponent* tank_transform = tank.GetComponent<TransformComponent>();
-		Entity& projectile(entity_manager.AddEntity("projectile", PROJECTILE));
-		projectile.AddComponent<TransformComponent>(tank_transform->position.x+16, tank_transform->position.y+16, 0, 0, 4, 4, 1);
-		projectile.AddComponent<SpriteComponent>("projectile-image");
-		projectile.AddComponent<ColliderComponent>("PROJECTILE", tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
-		projectile.AddComponent<ProjectileEmitterComponent>(50, 0, 200, true);
+		TransformComponent* tank_transform = tank.get_component<TransformComponent>();
+		Entity& projectile(entity_manager.add_entity("projectile", PROJECTILE));
+		projectile.add_component<TransformComponent>(tank_transform->position.x+16, tank_transform->position.y+16, 0, 0, 4, 4, 1);
+		projectile.add_component<SpriteComponent>("projectile-image");
+		projectile.add_component<ColliderComponent>("PROJECTILE", tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
+		projectile.add_component<ProjectileEmitterComponent>(50, 0, 200, true);
 
-		Entity& helipad(entity_manager.AddEntity("helipad", OBSTACLE));
-		helipad.AddComponent<TransformComponent>(470, 420, 0, 0, 32, 32, 1);
-		helipad.AddComponent<SpriteComponent>("heliport-image");
-		helipad.AddComponent<ColliderComponent>("LEVEL_COMPLETE", 470, 420, 32, 32);
+		Entity& helipad(entity_manager.add_entity("helipad", OBSTACLE));
+		helipad.add_component<TransformComponent>(470, 420, 0, 0, 32, 32, 1);
+		helipad.add_component<SpriteComponent>("heliport-image");
+		helipad.add_component<ColliderComponent>("LEVEL_COMPLETE", 470, 420, 32, 32);
 
-		Entity& radar(entity_manager.AddEntity("radar", UI));
-		radar.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
-		radar.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
+		Entity& radar(entity_manager.add_entity("radar", UI));
+		radar.add_component<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
+		radar.add_component<SpriteComponent>("radar-image", 8, 150, false, true);
 
-		entity_manager.ListEntities();
+		entity_manager.list_entities();
 	}
 
-	void Game::Input()
+	void Game::input()
 	{
 		SDL_PollEvent(&event);
 
@@ -126,7 +126,7 @@ namespace Radix
 		}
 	}
 
-	void Game::Update()
+	void Game::update()
 	{
 		float delta_time = (SDL_GetTicks() - ticks_last_frame) / 1000.00f;
 
@@ -134,30 +134,30 @@ namespace Radix
 
 		this->ticks_last_frame = SDL_GetTicks();
 
-		entity_manager.Update(delta_time);
+		entity_manager.update(delta_time);
 
-		UpdateCameraMovement();
-		CheckCollisions();
+		update_camera_movement();
+		check_collisions();
 	}
 
-	void Game::Render()
+	void Game::render()
 	{
 		SDL_SetRenderDrawColor(this->renderer, 21, 21, 21, 255);
 		SDL_RenderClear(this->renderer);
 
-		if(entity_manager.IsEmpty() == true)
+		if(entity_manager.is_empty() == true)
 		{
 			return;
 		}
 
-		entity_manager.Render();
+		entity_manager.render();
 
 		SDL_RenderPresent(this->renderer);
 	}
 
-	void Game::UpdateCameraMovement()
+	void Game::update_camera_movement()
 	{
-		TransformComponent* player_transform = player.GetComponent<TransformComponent>();
+		TransformComponent* player_transform = player.get_component<TransformComponent>();
 
 		camera.x = player_transform->position.x - static_cast<int>(WINDOW_WIDTH / 2);
 		camera.y = player_transform->position.y - static_cast<int>(WINDOW_HEIGHT / 2);
@@ -168,39 +168,39 @@ namespace Radix
 		camera.y = (camera.y > camera.h) ? camera.h : camera.y;
 	}
 
-	void Game::CheckCollisions()
+	void Game::check_collisions()
 	{
-		CollisionType collision_type = entity_manager.CheckCollisions();
+		CollisionType collision_type = entity_manager.check_collisions();
 
 		if(collision_type == PLAYER_ENEMY_COLLISION)
 		{
-			ProcessGameOver();
+			process_gameover();
 		}
 
 		if(collision_type == PLAYER_PROJECTILE_COLLISION)
 		{
-			ProcessGameOver();
+			process_gameover();
 		}
 
 		if(collision_type == PLAYER_LEVEL_COMPLETE_COLLISION)
 		{
-			ProcessNextLevel(1);
+			process_next_level(1);
 		}
 	}
 
-	void Game::ProcessGameOver()
+	void Game::process_gameover()
 	{
 		std::cout << "Game Over\n";
 		running = false;
 	}
 
-	void Game::ProcessNextLevel(int level_number)
+	void Game::process_next_level(int level_number)
 	{
 		std::cout << "Next Level\n";
 		running = false;
 	}
 
-	void Game::Destroy()
+	void Game::destroy()
 	{
 		SDL_DestroyRenderer(this->renderer);
 		SDL_DestroyWindow(this->window);
