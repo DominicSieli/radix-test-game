@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "settings.h"
 #include "../radix/headers/map.h"
 #include "../radix/headers/game.h"
 #include "../radix/headers/entity.h"
