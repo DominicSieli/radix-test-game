@@ -1,4 +1,5 @@
 #include <iostream>
+#include <SDL3/SDL.h>
 
 #include "settings.h"
 #include "../radix/headers/map.h"
@@ -26,19 +27,19 @@ namespace radix
 
 	Game::Game()
 	{
-		if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
+		if(!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
 		{
 			std::cerr << "Error Initializing SDL\n";
 			return;
 		}
 
-		if(TTF_Init() != 0)
+		if(!TTF_Init())
 		{
 			std::cerr << "Error Initializing SDL TTF\n";
 			return;
 		}
 
-		this->window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_BORDERLESS);
+		this->window = SDL_CreateWindow(NULL, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_BORDERLESS);
 
 		if(this->window == nullptr)
 		{
@@ -46,7 +47,9 @@ namespace radix
 			return;
 		}
 
-		this->renderer = SDL_CreateRenderer(this->window, -1, 0);
+		SDL_SetWindowPosition(this->window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+
+		this->renderer = SDL_CreateRenderer(this->window, nullptr);
 
 		if(this->renderer == nullptr)
 		{
@@ -121,8 +124,8 @@ namespace radix
 
 		switch(event.type)
 		{
-			case SDL_QUIT: { this->running = false; break; }
-			case SDL_KEYDOWN: { if(event.key.keysym.sym == SDLK_ESCAPE) this->running = false; break; }
+			case SDL_EVENT_QUIT: { this->running = false; break; }
+			case SDL_EVENT_KEY_DOWN: { if(event.key.key == SDLK_ESCAPE) this->running = false; break; }
 			default: break;
 		}
 	}
