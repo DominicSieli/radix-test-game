@@ -1,0 +1,11 @@
+# Ignore Everything
+*
+
+# Except
+!src/
+!src/**
+!assets/
+!assets/**
+!LICENSE
+!Makefile
+!.gitignore

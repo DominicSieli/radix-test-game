@@ -1,4 +1,4 @@
-#include "../radix/headers/game.h"
+#include "../radix/lib/game.h"
 
 int main(int argc, char* args[])
 {
