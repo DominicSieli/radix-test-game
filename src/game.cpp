@@ -2,19 +2,19 @@
 #include <SDL3/SDL.h>
 
 #include "settings.h"
-#include "../radix/lib/map.h"
-#include "../radix/lib/game.h"
-#include "../radix/lib/entity.h"
-#include "../radix/lib/component.h"
-#include "../radix/lib/constants.h"
-#include "../radix/lib/asset_manager.h"
-#include "../radix/lib/entity_manager.h"
-#include "../radix/lib/sprite_component.h"
-#include "../radix/lib/collider_component.h"
-#include "../radix/lib/keyboard_component.h"
-#include "../radix/lib/transform_component.h"
-#include "../radix/lib/text_label_component.h"
-#include "../radix/lib/projectile_emitter_component.h"
+#include "../radix/src/map.h"
+#include "../radix/src/game.h"
+#include "../radix/src/entity.h"
+#include "../radix/src/component.h"
+#include "../radix/src/constants.h"
+#include "../radix/src/asset_manager.h"
+#include "../radix/src/entity_manager.h"
+#include "../radix/src/sprite_component.h"
+#include "../radix/src/collider_component.h"
+#include "../radix/src/keyboard_component.h"
+#include "../radix/src/transform_component.h"
+#include "../radix/src/text_label_component.h"
+#include "../radix/src/projectile_emitter_component.h"
 
 namespace radix
 {
