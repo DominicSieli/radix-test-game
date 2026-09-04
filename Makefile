@@ -10,8 +10,8 @@ SRC = ./src/*.cpp
 CHECKSTD = --std=c++23
 OPTIMIZATION = -O3 -flto
 BINPATH = ./$(DIR)/$(BIN)
-RADIX_H = ../radix/src
-RADIX_CPP = ../radix/src/*.cpp
+RADIX_H = ./radix/src
+RADIX_CPP = ./radix/src/*.cpp
 RADIX = "./radix/lib/lib_radix.a"
 SDL = -lSDL3 -lSDL3_image -lSDL3_ttf -lSDL3_mixer
 WARNINGS = -w -Wall -Wextra -Wpedantic -Wfatal-errors
