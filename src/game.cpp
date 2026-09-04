@@ -8,13 +8,13 @@
 #include "../radix/src/component.h"
 #include "../radix/src/constants.h"
 #include "../radix/src/asset_manager.h"
+#include "../radix/src/text_component.h"
 #include "../radix/src/entity_manager.h"
 #include "../radix/src/sprite_component.h"
+#include "../radix/src/spawner_component.h"
 #include "../radix/src/collider_component.h"
 #include "../radix/src/keyboard_component.h"
 #include "../radix/src/transform_component.h"
-#include "../radix/src/text_label_component.h"
-#include "../radix/src/projectile_emitter_component.h"
 
 namespace radix
 {
@@ -86,8 +86,8 @@ namespace radix
 		map = new Map("jungle-tiletexture", 2, 32);
 		map->load_map("./assets/tilemaps/jungle.map", 25, 20);
 
-		Entity& label_level_name(entity_manager.add_entity("LabelLevelName", UI));
-		label_level_name.add_component<TextLabelComponent>(10, 10, "Level: 1", "charriot-font", WHITE);
+		Entity& level_name(entity_manager.add_entity("LabelLevelName", UI));
+		level_name.add_component<TextComponent>(10, 10, "Level: 1", "charriot-font", WHITE);
 
 		player.add_component<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
 		player.add_component<SpriteComponent>("chopper-image", 2, 90, true, false);
@@ -104,7 +104,7 @@ namespace radix
 		projectile.add_component<TransformComponent>(tank_transform->position.x+16, tank_transform->position.y+16, 0, 0, 4, 4, 1);
 		projectile.add_component<SpriteComponent>("projectile-image");
 		projectile.add_component<ColliderComponent>("PROJECTILE", tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
-		projectile.add_component<ProjectileEmitterComponent>(50, 0, 200, true);
+		projectile.add_component<SpawnerComponent>(50, 0, 200, true);
 
 		Entity& helipad(entity_manager.add_entity("helipad", OBSTACLE));
 		helipad.add_component<TransformComponent>(470, 420, 0, 0, 32, 32, 1);
