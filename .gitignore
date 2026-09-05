@@ -4,8 +4,6 @@
 # Except
 !src/
 !src/**
-!radix/
-!radix/**
 !assets/
 !assets/**
 !LICENSE
