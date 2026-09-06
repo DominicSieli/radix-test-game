@@ -114,8 +114,6 @@ namespace radix
 		Entity& radar(entity_manager.add_entity("radar", UI));
 		radar.add_component<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
 		radar.add_component<SpriteComponent>("radar-image", 8, 150, false, true);
-
-		entity_manager.list_entities();
 	}
 
 	void Game::input()
