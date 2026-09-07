@@ -2,6 +2,8 @@
 #include <SDL3/SDL.h>
 
 #include "settings.h"
+#include "actions_component.h"
+
 #include "../radix/src/map.h"
 #include "../radix/src/game.h"
 #include "../radix/src/entity.h"
@@ -13,7 +15,6 @@
 #include "../radix/src/sprite_component.h"
 #include "../radix/src/spawner_component.h"
 #include "../radix/src/collider_component.h"
-#include "../radix/src/keyboard_component.h"
 #include "../radix/src/transform_component.h"
 
 namespace radix
@@ -91,7 +92,7 @@ namespace radix
 
 		player.add_component<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
 		player.add_component<SpriteComponent>("chopper-image", 2, 90, true, false);
-		player.add_component<KeyboardComponent>("up", "down", "left", "right", "space");
+		player.add_component<ActionsComponent>(&event);
 		player.add_component<ColliderComponent>("PLAYER", 240, 106, 32, 32);
 
 		Entity& tank(entity_manager.add_entity("tank", ENEMY));
