@@ -1,5 +1,5 @@
-#ifndef ACTIONS_COMPONENT_H
-#define ACTIONS_COMPONENT_H
+#ifndef CONTROLS_COMPONENT_H
+#define CONTROLS_COMPONENT_H
 
 #include <SDL3/SDL.h>
 
@@ -8,16 +8,16 @@
 
 namespace radix
 {
-	class ActionsComponent: public Component
+	class ControlsComponent: public Component
 	{
 		public:
 			SDL_Event* event;
 			SpriteComponent* sprite_component;
 			TransformComponent* transform_component;
 
-			ActionsComponent();
+			ControlsComponent();
 
-			ActionsComponent(SDL_Event*);
+			ControlsComponent(SDL_Event*);
 
 			void initialize() override;
 

@@ -1,22 +1,22 @@
-#include "actions_component.h"
+#include "controls_component.h"
 
 #include <SDL3/SDL.h>
 
 namespace radix
 {
-	ActionsComponent::ActionsComponent()
+	ControlsComponent::ControlsComponent()
 	{}
 
-	ActionsComponent::ActionsComponent(SDL_Event* event): event{event}
+	ControlsComponent::ControlsComponent(SDL_Event* event): event{event}
 	{}
 
-	void ActionsComponent::initialize()
+	void ControlsComponent::initialize()
 	{
 		this->sprite_component = entity->get_component<SpriteComponent>();
 		this->transform_component = entity->get_component<TransformComponent>();
 	}
 
-	void ActionsComponent::update(float delta_time)
+	void ControlsComponent::update(float delta_time)
 	{
 		if(this->event->type == SDL_EVENT_KEY_DOWN)
 		{

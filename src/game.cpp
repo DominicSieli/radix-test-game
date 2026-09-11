@@ -2,7 +2,7 @@
 #include <SDL3/SDL.h>
 
 #include "settings.h"
-#include "actions_component.h"
+#include "controls_component.h"
 
 #include "../radix/src/map.h"
 #include "../radix/src/game.h"
@@ -20,7 +20,7 @@
 namespace radix
 {
 	Map* map;
-	SDL_Event Game::event;
+	SDL_Event Game::input_event;
 	EntityManager entity_manager;
 	SDL_Renderer* Game::renderer;
 	SDL_Rect Game::camera = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
@@ -92,7 +92,7 @@ namespace radix
 
 		player.add_component<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
 		player.add_component<SpriteComponent>("chopper-image", 2, 90, true, false);
-		player.add_component<ActionsComponent>(&event);
+		player.add_component<ControlsComponent>(&input_event);
 		player.add_component<ColliderComponent>("PLAYER", 240, 106, 32, 32);
 
 		Entity& tank(entity_manager.add_entity("tank", ENEMY));
@@ -119,12 +119,12 @@ namespace radix
 
 	void Game::input()
 	{
-		SDL_PollEvent(&event);
+		SDL_PollEvent(&input_event);
 
-		switch(event.type)
+		switch(input_event.type)
 		{
 			case SDL_EVENT_QUIT: { this->running = false; break; }
-			case SDL_EVENT_KEY_DOWN: { if(event.key.key == SDLK_ESCAPE) this->running = false; break; }
+			case SDL_EVENT_KEY_DOWN: { if(input_event.key.key == SDLK_ESCAPE) this->running = false; break; }
 			default: break;
 		}
 	}
