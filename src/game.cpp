@@ -12,10 +12,11 @@
 #include "../radix/src/asset_manager.h"
 #include "../radix/src/text_component.h"
 #include "../radix/src/entity_manager.h"
-#include "../radix/src/sprite_component.h"
 #include "../radix/src/spawner_component.h"
 #include "../radix/src/collider_component.h"
 #include "../radix/src/transform_component.h"
+#include "../radix/src/static_sprite_component.h"
+#include "../radix/src/animated_sprite_component.h"
 
 namespace radix
 {
@@ -91,30 +92,30 @@ namespace radix
 		level_name.add_component<TextComponent>(10, 10, "Level: 1", "charriot-font", WHITE);
 
 		player.add_component<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
-		player.add_component<SpriteComponent>("chopper-image", 2, 90, true, false);
+		player.add_component<AnimatedSpriteComponent>("chopper-image", 2, 90, true, false);
 		player.add_component<ControlsComponent>(&input_event);
 		player.add_component<ColliderComponent>("PLAYER", 240, 106, 32, 32);
 
 		Entity& tank(entity_manager.add_entity("tank", ENEMY));
 		tank.add_component<TransformComponent>(250, 495, 5, 0, 32, 32, 1);
-		tank.add_component<SpriteComponent>("tank-image");
+		tank.add_component<StaticSpriteComponent>("tank-image");
 		tank.add_component<ColliderComponent>("ENEMY", 150, 495, 32, 32);
 
 		TransformComponent* tank_transform = tank.get_component<TransformComponent>();
 		Entity& projectile(entity_manager.add_entity("projectile", PROJECTILE));
 		projectile.add_component<TransformComponent>(tank_transform->position.x+16, tank_transform->position.y+16, 0, 0, 4, 4, 1);
-		projectile.add_component<SpriteComponent>("projectile-image");
+		projectile.add_component<StaticSpriteComponent>("projectile-image");
 		projectile.add_component<ColliderComponent>("PROJECTILE", tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
 		projectile.add_component<SpawnerComponent>(50, 0, 200, true);
 
 		Entity& helipad(entity_manager.add_entity("helipad", OBSTACLE));
 		helipad.add_component<TransformComponent>(470, 420, 0, 0, 32, 32, 1);
-		helipad.add_component<SpriteComponent>("heliport-image");
+		helipad.add_component<StaticSpriteComponent>("heliport-image");
 		helipad.add_component<ColliderComponent>("LEVEL_COMPLETE", 470, 420, 32, 32);
 
 		Entity& radar(entity_manager.add_entity("radar", UI));
 		radar.add_component<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
-		radar.add_component<SpriteComponent>("radar-image", 8, 150, false, true);
+		radar.add_component<AnimatedSpriteComponent>("radar-image", 8, 150, false, true);
 	}
 
 	void Game::input()

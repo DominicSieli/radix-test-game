@@ -12,7 +12,7 @@ namespace radix
 
 	void ControlsComponent::initialize()
 	{
-		this->sprite_component = entity->get_component<SpriteComponent>();
+		this->animated_sprite_component = entity->get_component<AnimatedSpriteComponent>();
 		this->transform_component = entity->get_component<TransformComponent>();
 	}
 
@@ -26,28 +26,28 @@ namespace radix
 			{
 				this->transform_component->velocity.x = 0;
 				this->transform_component->velocity.y = -speed;
-				this->sprite_component->play("UpAnimation");
+				this->animated_sprite_component->play("UpAnimation");
 			}
 
 			if(this->event->key.key == SDLK_DOWN)
 			{
 				transform_component->velocity.x = 0;
 				transform_component->velocity.y = speed;
-				sprite_component->play("DownAnimation");
+				animated_sprite_component->play("DownAnimation");
 			}
 
 			if(this->event->key.key == SDLK_LEFT)
 			{
 				transform_component->velocity.x = -speed;
 				transform_component->velocity.y = 0;
-				sprite_component->play("LeftAnimation");
+				animated_sprite_component->play("LeftAnimation");
 			}
 
 			if(this->event->key.key == SDLK_RIGHT)
 			{
 				transform_component->velocity.x = speed;
 				transform_component->velocity.y = 0;
-				sprite_component->play("RightAnimation");
+				animated_sprite_component->play("RightAnimation");
 			}
 
 			if(this->event->key.key == SDLK_SPACE)

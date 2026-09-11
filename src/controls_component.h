@@ -3,8 +3,8 @@
 
 #include <SDL3/SDL.h>
 
-#include "../radix/src/sprite_component.h"
 #include "../radix/src/transform_component.h"
+#include "../radix/src/animated_sprite_component.h"
 
 namespace radix
 {
@@ -12,8 +12,8 @@ namespace radix
 	{
 		public:
 			SDL_Event* event;
-			SpriteComponent* sprite_component;
 			TransformComponent* transform_component;
+			AnimatedSpriteComponent* animated_sprite_component;
 
 			ControlsComponent();
 
