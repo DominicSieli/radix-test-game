@@ -1,8 +1,10 @@
 #include "../radix/src/game.h"
 
+using namespace radix;
+
 int main(int argc, char* args[])
 {
-	radix::Game game;
+	Game game;
 
 	while(game.is_running() == true)
 	{

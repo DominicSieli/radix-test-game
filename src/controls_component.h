@@ -6,23 +6,22 @@
 #include "../radix/src/transform_component.h"
 #include "../radix/src/animated_sprite_component.h"
 
-namespace radix
+using namespace radix;
+
+class ControlsComponent: public Component
 {
-	class ControlsComponent: public Component
-	{
-		public:
-			SDL_Event* event;
-			TransformComponent* transform_component;
-			AnimatedSpriteComponent* animated_sprite_component;
+	public:
+		SDL_Event* event;
+		TransformComponent* transform_component;
+		AnimatedSpriteComponent* animated_sprite_component;
 
-			ControlsComponent();
+		ControlsComponent();
 
-			ControlsComponent(SDL_Event*);
+		ControlsComponent(SDL_Event*);
 
-			void initialize() override;
+		void initialize() override;
 
-			void update(float) override;
-	};
-}
+		void update(float) override;
+};
 
 #endif
