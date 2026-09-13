@@ -9,6 +9,7 @@
 #include "../radix/src/entity.h"
 #include "../radix/src/component.h"
 #include "../radix/src/constants.h"
+#include "../radix/src/animation.h"
 #include "../radix/src/asset_manager.h"
 #include "../radix/src/text_component.h"
 #include "../radix/src/entity_manager.h"
@@ -91,8 +92,20 @@ void Game::load_level(int level_number)
 	Entity& level_name(entity_manager->add_entity("LabelLevelName", UI));
 	level_name.add_component<TextComponent>(10, 10, "Level: 1", "charriot-font", WHITE);
 
+	std::map<std::string, Animation>* chopper_animations = new std::map<std::string, Animation>;
+
+	Animation up = Animation(3, 2, 9);
+	Animation down = Animation(0, 2, 9);
+	Animation left = Animation(2, 2, 9);
+	Animation right = Animation(1, 2, 9);
+
+	(*chopper_animations).emplace("Up", up);
+	(*chopper_animations).emplace("Down", down);
+	(*chopper_animations).emplace("Left", left);
+	(*chopper_animations).emplace("Right", right);
+
 	player.add_component<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
-	player.add_component<AnimatedSpriteComponent>("chopper-image", 2, 90, true, false);
+	player.add_component<AnimatedSpriteComponent>("chopper-image", chopper_animations, "Down", true, false);
 	player.add_component<ControlsComponent>(&input_event);
 	player.add_component<ColliderComponent>("PLAYER", 240, 106, 32, 32);
 
@@ -113,9 +126,13 @@ void Game::load_level(int level_number)
 	helipad.add_component<StaticSpriteComponent>("heliport-image", false);
 	helipad.add_component<ColliderComponent>("LEVEL_COMPLETE", 470, 420, 32, 32);
 
+	std::map<std::string, Animation>* radar_animations = new std::map<std::string, Animation>;
+	Animation rotate = Animation(0, 8, 150);
+	radar_animations->emplace("rotate", rotate);
+
 	Entity& radar(entity_manager->add_entity("radar", UI));
 	radar.add_component<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
-	radar.add_component<AnimatedSpriteComponent>("radar-image", 8, 150, false, true);
+	radar.add_component<AnimatedSpriteComponent>("radar-image", radar_animations, "rotate", false, true);
 }
 
 void Game::input()

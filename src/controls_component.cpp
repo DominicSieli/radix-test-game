@@ -24,28 +24,28 @@ void ControlsComponent::update(float delta_time)
 		{
 			this->transform_component->velocity.x = 0;
 			this->transform_component->velocity.y = -speed;
-			this->animated_sprite_component->play("UpAnimation");
+			this->animated_sprite_component->play("Up");
 		}
 
 		if(this->event->key.key == SDLK_DOWN)
 		{
 			transform_component->velocity.x = 0;
 			transform_component->velocity.y = speed;
-			animated_sprite_component->play("DownAnimation");
+			animated_sprite_component->play("Down");
 		}
 
 		if(this->event->key.key == SDLK_LEFT)
 		{
 			transform_component->velocity.x = -speed;
 			transform_component->velocity.y = 0;
-			animated_sprite_component->play("LeftAnimation");
+			animated_sprite_component->play("Left");
 		}
 
 		if(this->event->key.key == SDLK_RIGHT)
 		{
 			transform_component->velocity.x = speed;
 			transform_component->velocity.y = 0;
-			animated_sprite_component->play("RightAnimation");
+			animated_sprite_component->play("Right");
 		}
 
 		if(this->event->key.key == SDLK_SPACE)
