@@ -6,7 +6,7 @@
 #include "../radix/src/transform_component.h"
 #include "../radix/src/animated_sprite_component.h"
 
-using namespace radix;
+using namespace Radix;
 
 class ControlsComponent: public Component
 {

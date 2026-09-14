@@ -19,7 +19,7 @@
 #include "../radix/src/static_sprite_component.h"
 #include "../radix/src/animated_sprite_component.h"
 
-using namespace radix;
+using namespace Radix;
 
 Map* map;
 SDL_Event Game::input_event;
