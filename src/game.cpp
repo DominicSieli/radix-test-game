@@ -4,9 +4,9 @@
 #include "settings.h"
 #include "controls_component.h"
 
-#include "../radix/src/map.h"
 #include "../radix/src/game.h"
 #include "../radix/src/entity.h"
+#include "../radix/src/tile_map.h"
 #include "../radix/src/component.h"
 #include "../radix/src/constants.h"
 #include "../radix/src/animation.h"
@@ -21,7 +21,7 @@
 
 using namespace Radix;
 
-Map* map;
+TileMap* tile_map;
 SDL_Event Game::input_event;
 SDL_Renderer* Game::renderer;
 EntityManager* entity_manager = new EntityManager();
@@ -86,8 +86,8 @@ void Game::load_level(int level_number)
 	asset_manager->add_texture("jungle-tiletexture", std::string("./assets/tilemaps/jungle.png").c_str());
 	asset_manager->add_texture("projectile-image", std::string("./assets/images/bullet-enemy.png").c_str());
 
-	map = new Map("jungle-tiletexture", entity_manager, 2, 32);
-	map->load_map("./assets/tilemaps/jungle.map", 25, 20);
+	tile_map = new TileMap("jungle-tiletexture", entity_manager, 2, 32);
+	tile_map->load_map("./assets/tilemaps/jungle.map", 25, 20);
 
 	Entity* level_name(entity_manager->add_entity("LabelLevelName", UI));
 	level_name->add_component<TextComponent>(10, 10, "Level: 1", "charriot-font", WHITE);
