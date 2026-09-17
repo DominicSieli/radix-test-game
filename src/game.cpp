@@ -74,7 +74,7 @@ bool Game::is_running() const
 	return this->running;
 }
 
-Entity& player(entity_manager->add_entity("player", PLAYER));
+Entity* player(entity_manager->add_entity("player", PLAYER));
 
 void Game::load_level(int level_number)
 {
@@ -89,8 +89,8 @@ void Game::load_level(int level_number)
 	map = new Map("jungle-tiletexture", entity_manager, 2, 32);
 	map->load_map("./assets/tilemaps/jungle.map", 25, 20);
 
-	Entity& level_name(entity_manager->add_entity("LabelLevelName", UI));
-	level_name.add_component<TextComponent>(10, 10, "Level: 1", "charriot-font", WHITE);
+	Entity* level_name(entity_manager->add_entity("LabelLevelName", UI));
+	level_name->add_component<TextComponent>(10, 10, "Level: 1", "charriot-font", WHITE);
 
 	std::map<std::string, Animation>* chopper_animations = new std::map<std::string, Animation>;
 
@@ -104,35 +104,35 @@ void Game::load_level(int level_number)
 	(*chopper_animations).emplace("Left", left);
 	(*chopper_animations).emplace("Right", right);
 
-	player.add_component<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
-	player.add_component<AnimatedSpriteComponent>("chopper-image", chopper_animations, "Down", true, false);
-	player.add_component<ControlsComponent>(&input_event);
-	player.add_component<ColliderComponent>("PLAYER", 240, 106, 32, 32);
+	player->add_component<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
+	player->add_component<AnimatedSpriteComponent>("chopper-image", chopper_animations, "Down", true, false);
+	player->add_component<ControlsComponent>(&input_event);
+	player->add_component<ColliderComponent>("PLAYER", 240, 106, 32, 32);
 
-	Entity& tank(entity_manager->add_entity("tank", ENEMY));
-	tank.add_component<TransformComponent>(250, 495, 5, 0, 32, 32, 1);
-	tank.add_component<StaticSpriteComponent>("tank-image", false);
-	tank.add_component<ColliderComponent>("ENEMY", 150, 495, 32, 32);
+	Entity* tank(entity_manager->add_entity("tank", ENEMY));
+	tank->add_component<TransformComponent>(250, 495, 5, 0, 32, 32, 1);
+	tank->add_component<StaticSpriteComponent>("tank-image", false);
+	tank->add_component<ColliderComponent>("ENEMY", 150, 495, 32, 32);
 
-	TransformComponent* tank_transform = tank.get_component<TransformComponent>();
-	Entity& projectile(entity_manager->add_entity("projectile", PROJECTILE));
-	projectile.add_component<TransformComponent>(tank_transform->position.x+16, tank_transform->position.y+16, 0, 0, 4, 4, 1);
-	projectile.add_component<StaticSpriteComponent>("projectile-image", false);
-	projectile.add_component<ColliderComponent>("PROJECTILE", tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
-	projectile.add_component<SpawnerComponent>(50, 0, 200, true);
+	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
+	Entity* projectile(entity_manager->add_entity("projectile", PROJECTILE));
+	projectile->add_component<TransformComponent>(tank_transform->position.x+16, tank_transform->position.y+16, 0, 0, 4, 4, 1);
+	projectile->add_component<StaticSpriteComponent>("projectile-image", false);
+	projectile->add_component<ColliderComponent>("PROJECTILE", tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
+	projectile->add_component<SpawnerComponent>(50, 0, 200, true);
 
-	Entity& helipad(entity_manager->add_entity("helipad", OBSTACLE));
-	helipad.add_component<TransformComponent>(470, 420, 0, 0, 32, 32, 1);
-	helipad.add_component<StaticSpriteComponent>("heliport-image", false);
-	helipad.add_component<ColliderComponent>("LEVEL_COMPLETE", 470, 420, 32, 32);
+	Entity* helipad(entity_manager->add_entity("helipad", OBSTACLE));
+	helipad->add_component<TransformComponent>(470, 420, 0, 0, 32, 32, 1);
+	helipad->add_component<StaticSpriteComponent>("heliport-image", false);
+	helipad->add_component<ColliderComponent>("LEVEL_COMPLETE", 470, 420, 32, 32);
 
 	std::map<std::string, Animation>* radar_animations = new std::map<std::string, Animation>;
 	Animation rotate = Animation(0, 8, 150);
 	radar_animations->emplace("rotate", rotate);
 
-	Entity& radar(entity_manager->add_entity("radar", UI));
-	radar.add_component<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
-	radar.add_component<AnimatedSpriteComponent>("radar-image", radar_animations, "rotate", false, true);
+	Entity* radar(entity_manager->add_entity("radar", UI));
+	radar->add_component<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
+	radar->add_component<AnimatedSpriteComponent>("radar-image", radar_animations, "rotate", false, true);
 }
 
 void Game::input()
@@ -178,7 +178,7 @@ void Game::render()
 
 void Game::update_camera_movement()
 {
-	TransformComponent* player_transform = player.get_component<TransformComponent>();
+	TransformComponent* player_transform = player->get_component<TransformComponent>();
 
 	camera.x = player_transform->position.x - static_cast<int>(WINDOW_WIDTH / 2);
 	camera.y = player_transform->position.y - static_cast<int>(WINDOW_HEIGHT / 2);
