@@ -1,6 +1,7 @@
-#include "controls_component.h"
-
 #include <SDL3/SDL.h>
+
+#include "player_animations.h"
+#include "controls_component.h"
 
 ControlsComponent::ControlsComponent()
 {}
@@ -24,28 +25,28 @@ void ControlsComponent::update(float delta_time)
 		{
 			this->transform_component->velocity.x = 0;
 			this->transform_component->velocity.y = -speed;
-			this->animated_sprite_component->play("Up");
+			this->animated_sprite_component->play(PLAYER_UP);
 		}
 
 		if(this->event->key.key == SDLK_DOWN)
 		{
 			transform_component->velocity.x = 0;
 			transform_component->velocity.y = speed;
-			animated_sprite_component->play("Down");
+			animated_sprite_component->play(PLAYER_DOWN);
 		}
 
 		if(this->event->key.key == SDLK_LEFT)
 		{
 			transform_component->velocity.x = -speed;
 			transform_component->velocity.y = 0;
-			animated_sprite_component->play("Left");
+			animated_sprite_component->play(PLAYER_LEFT);
 		}
 
 		if(this->event->key.key == SDLK_RIGHT)
 		{
 			transform_component->velocity.x = speed;
 			transform_component->velocity.y = 0;
-			animated_sprite_component->play("Right");
+			animated_sprite_component->play(PLAYER_RIGHT);
 		}
 
 		if(this->event->key.key == SDLK_SPACE)

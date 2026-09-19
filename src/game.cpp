@@ -4,6 +4,8 @@
 #include "settings.h"
 #include "controls_component.h"
 
+#include "texture_id.h"
+#include "player_animations.h"
 #include "../radix/src/game.h"
 #include "../radix/src/entity.h"
 #include "../radix/src/tile_map.h"
@@ -78,61 +80,61 @@ Entity* player(entity_manager->add_entity("player", PLAYER));
 
 void Game::load_level(int level_number)
 {
-	asset_manager->add_font("charriot-font", std::string("./assets/fonts/charriot.ttf").c_str(), 24);
-	asset_manager->add_texture("tank-image", std::string("./assets/images/tank-big-right.png").c_str());
-	asset_manager->add_texture("chopper-image", std::string("./assets/images/chopper-spritesheet.png").c_str());
-	asset_manager->add_texture("radar-image", std::string("./assets/images/radar.png").c_str());
-	asset_manager->add_texture("heliport-image", std::string("./assets/images/heliport.png").c_str());
-	asset_manager->add_texture("jungle-tiletexture", std::string("./assets/tilemaps/jungle.png").c_str());
-	asset_manager->add_texture("projectile-image", std::string("./assets/images/bullet-enemy.png").c_str());
+	asset_manager->add_font(0, std::string("./assets/fonts/charriot.ttf").c_str(), 24);
+	asset_manager->add_texture(TANK, std::string("./assets/images/tank-big-right.png").c_str());
+	asset_manager->add_texture(CHOPPER, std::string("./assets/images/chopper-spritesheet.png").c_str());
+	asset_manager->add_texture(RADAR, std::string("./assets/images/radar.png").c_str());
+	asset_manager->add_texture(HELIPORT, std::string("./assets/images/heliport.png").c_str());
+	asset_manager->add_texture(JUNGLE_MAP, std::string("./assets/tilemaps/jungle.png").c_str());
+	asset_manager->add_texture(ENEMY_PROJECTILE, std::string("./assets/images/bullet-enemy.png").c_str());
 
-	tile_map = new TileMap("jungle-tiletexture", entity_manager, 2, 32);
+	tile_map = new TileMap(JUNGLE_MAP, entity_manager, 2, 32);
 	tile_map->load_map("./assets/tilemaps/jungle.map", 25, 20);
 
 	Entity* level_name(entity_manager->add_entity("LabelLevelName", UI));
-	level_name->add_component<TextComponent>(10, 10, "Level: 1", "charriot-font", WHITE);
+	level_name->add_component<TextComponent>(10, 10, "Level: 1", 0, WHITE);
 
-	std::map<std::string, Animation>* chopper_animations = new std::map<std::string, Animation>;
+	std::map<unsigned int, Animation> chopper_animations;
 
 	Animation up = Animation(3, 2, 9);
 	Animation down = Animation(0, 2, 9);
 	Animation left = Animation(2, 2, 9);
 	Animation right = Animation(1, 2, 9);
 
-	(*chopper_animations).emplace("Up", up);
-	(*chopper_animations).emplace("Down", down);
-	(*chopper_animations).emplace("Left", left);
-	(*chopper_animations).emplace("Right", right);
+	chopper_animations.emplace(PLAYER_UP, up);
+	chopper_animations.emplace(PLAYER_DOWN, down);
+	chopper_animations.emplace(PLAYER_LEFT, left);
+	chopper_animations.emplace(PLAYER_RIGHT, right);
 
 	player->add_component<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
-	player->add_component<AnimatedSpriteComponent>("chopper-image", chopper_animations, "Down", true, false);
+	player->add_component<AnimatedSpriteComponent>(CHOPPER, chopper_animations, PLAYER_DOWN, false);
 	player->add_component<ControlsComponent>(&input_event);
 	player->add_component<ColliderComponent>("PLAYER", 240, 106, 32, 32);
 
 	Entity* tank(entity_manager->add_entity("tank", ENEMY));
 	tank->add_component<TransformComponent>(250, 495, 5, 0, 32, 32, 1);
-	tank->add_component<StaticSpriteComponent>("tank-image", false);
+	tank->add_component<StaticSpriteComponent>(TANK, false);
 	tank->add_component<ColliderComponent>("ENEMY", 150, 495, 32, 32);
 
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
 	Entity* projectile(entity_manager->add_entity("projectile", PROJECTILE));
 	projectile->add_component<TransformComponent>(tank_transform->position.x+16, tank_transform->position.y+16, 0, 0, 4, 4, 1);
-	projectile->add_component<StaticSpriteComponent>("projectile-image", false);
+	projectile->add_component<StaticSpriteComponent>(ENEMY_PROJECTILE, false);
 	projectile->add_component<ColliderComponent>("PROJECTILE", tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
 	projectile->add_component<SpawnerComponent>(50, 0, 200, true);
 
-	Entity* helipad(entity_manager->add_entity("helipad", OBSTACLE));
-	helipad->add_component<TransformComponent>(470, 420, 0, 0, 32, 32, 1);
-	helipad->add_component<StaticSpriteComponent>("heliport-image", false);
-	helipad->add_component<ColliderComponent>("LEVEL_COMPLETE", 470, 420, 32, 32);
+	Entity* heliport(entity_manager->add_entity("heliport", OBSTACLE));
+	heliport->add_component<TransformComponent>(470, 420, 0, 0, 32, 32, 1);
+	heliport->add_component<StaticSpriteComponent>(HELIPORT, false);
+	heliport->add_component<ColliderComponent>("LEVEL_COMPLETE", 470, 420, 32, 32);
 
-	std::map<std::string, Animation>* radar_animations = new std::map<std::string, Animation>;
+	std::map<unsigned int, Animation> radar_animation;
 	Animation rotate = Animation(0, 8, 150);
-	radar_animations->emplace("rotate", rotate);
+	radar_animation.emplace(0, rotate);
 
 	Entity* radar(entity_manager->add_entity("radar", UI));
 	radar->add_component<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
-	radar->add_component<AnimatedSpriteComponent>("radar-image", radar_animations, "rotate", false, true);
+	radar->add_component<AnimatedSpriteComponent>(RADAR, radar_animation, 0, true);
 }
 
 void Game::input()
