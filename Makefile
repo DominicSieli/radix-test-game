@@ -17,14 +17,19 @@ SDL = -lSDL3 -lSDL3_image -lSDL3_ttf -lSDL3_mixer
 WARNINGS = -w -Wall -Wextra -Wpedantic -Wfatal-errors
 CHECKFLAGS = --quiet --enable=all --force --error-exitcode=1
 
-build:
-	mkdir -p $(DIR);
-	$(CXX) $(STD) $(WARNINGS) $(OPTIMIZATION) $(SRC) $(RADIX_CPP) $(IFLAGS) $(RADIX_H) $(LFLAGS) $(SDL) $(OUT) $(BINPATH);
-
-dev:
+lib_build:
 	mkdir -p $(DIR);
 	$(CXX) $(STD) $(WARNINGS) $(SRC) $(LFLAGS) $(RADIX) $(SDL) $(OUT) $(BINPATH);
 	$(BINPATH)
+
+test_build:
+	mkdir -p $(DIR);
+	$(CXX) $(STD) $(WARNINGS) $(SRC) $(RADIX_CPP) $(IFLAGS) $(RADIX_H) $(LFLAGS) $(SDL) $(OUT) $(BINPATH);
+	$(BINPATH)
+
+release_build:
+	mkdir -p $(DIR);
+	$(CXX) $(STD) $(WARNINGS) $(OPTIMIZATION) $(SRC) $(RADIX_CPP) $(IFLAGS) $(RADIX_H) $(LFLAGS) $(SDL) $(OUT) $(BINPATH);
 
 clean:
 	rm -rf $(DIR);
