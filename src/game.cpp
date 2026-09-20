@@ -4,17 +4,18 @@
 #include "settings.h"
 #include "controls_component.h"
 
+#include "colors.h"
 #include "texture_id.h"
 #include "player_animations.h"
 #include "../radix/src/game.h"
 #include "../radix/src/entity.h"
 #include "../radix/src/tile_map.h"
 #include "../radix/src/component.h"
-#include "../radix/src/constants.h"
 #include "../radix/src/animation.h"
 #include "../radix/src/asset_manager.h"
 #include "../radix/src/text_component.h"
 #include "../radix/src/entity_manager.h"
+#include "../radix/src/collision_tags.h"
 #include "../radix/src/spawner_component.h"
 #include "../radix/src/collider_component.h"
 #include "../radix/src/transform_component.h"
@@ -76,7 +77,7 @@ bool Game::is_running() const
 	return this->running;
 }
 
-Entity* player(entity_manager->add_entity("player", PLAYER));
+Entity* player(entity_manager->add_entity("player", 2));
 
 void Game::load_level(int level_number)
 {
@@ -89,9 +90,9 @@ void Game::load_level(int level_number)
 	asset_manager->add_texture(ENEMY_PROJECTILE, std::string("./assets/images/bullet-enemy.png").c_str());
 
 	tile_map = new TileMap(JUNGLE_MAP, entity_manager, 2, 32);
-	tile_map->load_map("./assets/tilemaps/jungle.map", 25, 20);
+	tile_map->load_map("./assets/tilemaps/jungle.map", 25, 20, "tile", 0);
 
-	Entity* level_name(entity_manager->add_entity("LabelLevelName", UI));
+	Entity* level_name(entity_manager->add_entity("LabelLevelName", 9));
 	level_name->add_component<TextComponent>(10, 10, "Level: 1", 0, WHITE);
 
 	std::map<unsigned int, Animation> chopper_animations;
@@ -109,30 +110,30 @@ void Game::load_level(int level_number)
 	player->add_component<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
 	player->add_component<AnimatedSpriteComponent>(CHOPPER, chopper_animations, PLAYER_DOWN, false);
 	player->add_component<ControlsComponent>(&input_event);
-	player->add_component<ColliderComponent>("PLAYER", 240, 106, 32, 32);
+	player->add_component<ColliderComponent>(PLAYER_COLLIDER, 240, 106, 32, 32);
 
-	Entity* tank(entity_manager->add_entity("tank", ENEMY));
+	Entity* tank(entity_manager->add_entity("tank", 1));
 	tank->add_component<TransformComponent>(250, 495, 5, 0, 32, 32, 1);
 	tank->add_component<StaticSpriteComponent>(TANK, false);
-	tank->add_component<ColliderComponent>("ENEMY", 150, 495, 32, 32);
+	tank->add_component<ColliderComponent>(ENEMY_COLLIDER, 150, 495, 32, 32);
 
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
-	Entity* projectile(entity_manager->add_entity("projectile", PROJECTILE));
+	Entity* projectile(entity_manager->add_entity("projectile", 1));
 	projectile->add_component<TransformComponent>(tank_transform->position.x+16, tank_transform->position.y+16, 0, 0, 4, 4, 1);
 	projectile->add_component<StaticSpriteComponent>(ENEMY_PROJECTILE, false);
-	projectile->add_component<ColliderComponent>("PROJECTILE", tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
+	projectile->add_component<ColliderComponent>(ENEMY_PROJECTILE_COLLIDER, tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
 	projectile->add_component<SpawnerComponent>(50, 0, 200, true);
 
-	Entity* heliport(entity_manager->add_entity("heliport", OBSTACLE));
+	Entity* heliport(entity_manager->add_entity("heliport", 1));
 	heliport->add_component<TransformComponent>(470, 420, 0, 0, 32, 32, 1);
 	heliport->add_component<StaticSpriteComponent>(HELIPORT, false);
-	heliport->add_component<ColliderComponent>("LEVEL_COMPLETE", 470, 420, 32, 32);
+	heliport->add_component<ColliderComponent>(LEVEL_COMPLETE_COLLIDER, 470, 420, 32, 32);
 
 	std::map<unsigned int, Animation> radar_animation;
 	Animation rotate = Animation(0, 8, 150);
 	radar_animation.emplace(0, rotate);
 
-	Entity* radar(entity_manager->add_entity("radar", UI));
+	Entity* radar(entity_manager->add_entity("radar", 9));
 	radar->add_component<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
 	radar->add_component<AnimatedSpriteComponent>(RADAR, radar_animation, 0, true);
 }
@@ -193,7 +194,7 @@ void Game::update_camera_movement()
 
 void Game::check_collisions()
 {
-	CollisionType collision_type = entity_manager->check_collisions();
+	Collisions collision_type = entity_manager->check_collisions();
 
 	if(collision_type == PLAYER_ENEMY_COLLISION)
 	{
