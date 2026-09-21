@@ -6,7 +6,9 @@
 #include "controls_component.h"
 
 #include "colors.h"
+#include "font_id.h"
 #include "texture_id.h"
+#include "asset_paths.h"
 #include "collision_tags.h"
 #include "player_animations.h"
 #include "../radix/src/game.h"
@@ -87,19 +89,19 @@ Entity* player(entity_manager->add_entity("player", 2));
 
 void Game::load_level(int level_number)
 {
-	asset_manager->add_font(0, std::string("./assets/fonts/charriot.ttf").c_str(), 24);
-	asset_manager->add_texture(TANK, std::string("./assets/images/tank-big-right.png").c_str());
-	asset_manager->add_texture(CHOPPER, std::string("./assets/images/chopper-spritesheet.png").c_str());
-	asset_manager->add_texture(RADAR, std::string("./assets/images/radar.png").c_str());
-	asset_manager->add_texture(HELIPORT, std::string("./assets/images/heliport.png").c_str());
-	asset_manager->add_texture(JUNGLE_MAP, std::string("./assets/tilemaps/jungle.png").c_str());
-	asset_manager->add_texture(ENEMY_PROJECTILE, std::string("./assets/images/bullet-enemy.png").c_str());
+	asset_manager->add_font(CHARRIOT_ID, CHARRIOT_TTF_PATH, 24);
+	asset_manager->add_texture(TANK_TEXTURE_ID, TANK_PNG_PATH);
+	asset_manager->add_texture(CHOPPER_TEXTURE_ID, CHOPPER_PNG_PATH);
+	asset_manager->add_texture(RADAR_TEXTURE_ID, RADAR_PNG_PATH);
+	asset_manager->add_texture(HELIPORT_TEXTURE_ID, HELIPORT_PNG_PATH);
+	asset_manager->add_texture(JUNGLE_MAP_TEXTURE_ID, JUNGLE_PNG_PATH);
+	asset_manager->add_texture(ENEMY_BULLET_TEXTURE_ID, BULLET_PNG_PATH);
 
-	tile_map = new TileMap(JUNGLE_MAP, entity_manager, 2, 32);
-	tile_map->load_map("./assets/tilemaps/jungle.map", 25, 20, "tile", 0);
+	tile_map = new TileMap(JUNGLE_MAP_TEXTURE_ID, entity_manager, 2, 32);
+	tile_map->load_map(JUNGLE_MAP_PATH, 25, 20, "tile", 0);
 
 	Entity* level_name(entity_manager->add_entity("LabelLevelName", 9));
-	level_name->add_component<TextComponent>(10, 10, "Level: 1", 0, WHITE);
+	level_name->add_component<TextComponent>(10, 10, "Level: 1", CHARRIOT_ID, WHITE);
 
 	std::map<unsigned int, Animation> chopper_animations;
 
@@ -114,26 +116,26 @@ void Game::load_level(int level_number)
 	chopper_animations.emplace(PLAYER_RIGHT, right);
 
 	player->add_component<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
-	player->add_component<AnimatedSpriteComponent>(CHOPPER, chopper_animations, PLAYER_DOWN, false);
+	player->add_component<AnimatedSpriteComponent>(CHOPPER_TEXTURE_ID, chopper_animations, PLAYER_DOWN, false);
 	player->add_component<ControlsComponent>(&input_event);
-	player->add_component<ColliderComponent>(PLAYER_COLLIDER, 240, 106, 32, 32);
+	player->add_component<ColliderComponent>(PLAYER_COLLIDER_TAG, 240, 106, 32, 32);
 
 	Entity* tank(entity_manager->add_entity("tank", 1));
 	tank->add_component<TransformComponent>(250, 495, 5, 0, 32, 32, 1);
-	tank->add_component<StaticSpriteComponent>(TANK, false);
-	tank->add_component<ColliderComponent>(ENEMY_COLLIDER, 150, 495, 32, 32);
+	tank->add_component<StaticSpriteComponent>(TANK_TEXTURE_ID, false);
+	tank->add_component<ColliderComponent>(ENEMY_COLLIDER_TAG, 150, 495, 32, 32);
 
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
 	Entity* projectile(entity_manager->add_entity("projectile", 1));
 	projectile->add_component<TransformComponent>(tank_transform->position.x+16, tank_transform->position.y+16, 0, 0, 4, 4, 1);
-	projectile->add_component<StaticSpriteComponent>(ENEMY_PROJECTILE, false);
-	projectile->add_component<ColliderComponent>(ENEMY_PROJECTILE_COLLIDER, tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
+	projectile->add_component<StaticSpriteComponent>(ENEMY_BULLET_TEXTURE_ID, false);
+	projectile->add_component<ColliderComponent>(ENEMY_BULLET_COLLIDER_TAG, tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
 	projectile->add_component<SpawnerComponent>(50, 0, 200, true);
 
 	Entity* heliport(entity_manager->add_entity("heliport", 1));
 	heliport->add_component<TransformComponent>(470, 420, 0, 0, 32, 32, 1);
-	heliport->add_component<StaticSpriteComponent>(HELIPORT, false);
-	heliport->add_component<ColliderComponent>(LEVEL_COMPLETE_COLLIDER, 470, 420, 32, 32);
+	heliport->add_component<StaticSpriteComponent>(HELIPORT_TEXTURE_ID, false);
+	heliport->add_component<ColliderComponent>(HELIPORT_COLLIDER_TAG, 470, 420, 32, 32);
 
 	std::map<unsigned int, Animation> radar_animation;
 	Animation rotate = Animation(0, 8, 150);
@@ -141,7 +143,7 @@ void Game::load_level(int level_number)
 
 	Entity* radar(entity_manager->add_entity("radar", 9));
 	radar->add_component<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
-	radar->add_component<AnimatedSpriteComponent>(RADAR, radar_animation, 0, true);
+	radar->add_component<AnimatedSpriteComponent>(RADAR_TEXTURE_ID, radar_animation, 0, true);
 }
 
 void Game::input()
@@ -200,29 +202,32 @@ void Game::update_camera_movement()
 
 void Game::check_collisions()
 {
-	Collision player_enemy_collision = {PLAYER_COLLIDER, ENEMY_COLLIDER, PLAYER_ENEMY_COLLISION};
-	Collision player_projectile_collision = {PLAYER_COLLIDER, ENEMY_PROJECTILE_COLLIDER, PLAYER_PROJECTILE_COLLISION};
-	Collision player_level_complete_collision = {PLAYER_COLLIDER, LEVEL_COMPLETE_COLLIDER, PLAYER_LEVEL_COMPLETE_COLLISION};
+	Collision player_enemy_collision = {PLAYER_COLLIDER_TAG, ENEMY_COLLIDER_TAG, PLAYER_ENEMY_COLLISION};
+	Collision player_heliport_collision = {PLAYER_COLLIDER_TAG, HELIPORT_COLLIDER_TAG, PLAYER_HELIPORT_COLLISION};
+	Collision player_enemy_projectile_collision = {PLAYER_COLLIDER_TAG, ENEMY_BULLET_COLLIDER_TAG, PLAYER_ENEMY_BULLET_COLLISION};
 	std::vector<Collision> collisions;
 
 	collisions.push_back(player_enemy_collision);
-	collisions.push_back(player_projectile_collision);
-	collisions.push_back(player_level_complete_collision);
+	collisions.push_back(player_heliport_collision);
+	collisions.push_back(player_enemy_projectile_collision);
 
 	unsigned int collision_type = collision_manager->check_collisions(collisions, NO_COLLISION);
 
 	if(collision_type == PLAYER_ENEMY_COLLISION)
 	{
+		std::cout << "PLAYER_ENEMY_COLLISION" << std::endl;
 		process_gameover();
 	}
 
-	if(collision_type == PLAYER_PROJECTILE_COLLISION)
+	if(collision_type == PLAYER_ENEMY_BULLET_COLLISION)
 	{
+		std::cout << "PLAYER_ENEMY_BULLET_COLLISION" << std::endl;
 		process_gameover();
 	}
 
-	if(collision_type == PLAYER_LEVEL_COMPLETE_COLLISION)
+	if(collision_type == PLAYER_HELIPORT_COLLISION)
 	{
+		std::cout << "PLAYER_HELIPORT_COLLISION" << std::endl;
 		process_next_level(1);
 	}
 }

@@ -3,10 +3,10 @@
 
 enum PlayerAnimations : unsigned int
 {
-	PLAYER_UP = 0,
-	PLAYER_DOWN = 1,
-	PLAYER_LEFT = 2,
-	PLAYER_RIGHT = 3
+	PLAYER_UP,
+	PLAYER_DOWN,
+	PLAYER_LEFT,
+	PLAYER_RIGHT
 };
 
 #endif
