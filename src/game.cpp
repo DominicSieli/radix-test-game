@@ -18,6 +18,7 @@
 #include "../radix/src/asset_manager.h"
 #include "../radix/src/text_component.h"
 #include "../radix/src/entity_manager.h"
+#include "../radix/src/render_manager.h"
 #include "../radix/src/spawner_component.h"
 #include "../radix/src/collision_manager.h"
 #include "../radix/src/collider_component.h"
@@ -33,6 +34,7 @@ SDL_Renderer* Game::renderer;
 EntityManager* entity_manager = new EntityManager();
 AssetManager* Game::asset_manager = new AssetManager();
 SDL_Rect Game::camera = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
+RenderManager* render_manager = new RenderManager(entity_manager);
 CollisionManager* collision_manager = new CollisionManager(entity_manager);
 
 Game::Game()
@@ -178,7 +180,7 @@ void Game::render()
 		return;
 	}
 
-	entity_manager->render();
+	render_manager->render();
 
 	SDL_RenderPresent(this->renderer);
 }
