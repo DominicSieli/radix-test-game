@@ -1,3 +1,4 @@
+#include <vector>
 #include <iostream>
 #include <SDL3/SDL.h>
 
@@ -6,17 +7,19 @@
 
 #include "colors.h"
 #include "texture_id.h"
+#include "collision_tags.h"
 #include "player_animations.h"
 #include "../radix/src/game.h"
 #include "../radix/src/entity.h"
 #include "../radix/src/tile_map.h"
 #include "../radix/src/component.h"
 #include "../radix/src/animation.h"
+#include "../radix/src/collision.h"
 #include "../radix/src/asset_manager.h"
 #include "../radix/src/text_component.h"
 #include "../radix/src/entity_manager.h"
-#include "../radix/src/collision_tags.h"
 #include "../radix/src/spawner_component.h"
+#include "../radix/src/collision_manager.h"
 #include "../radix/src/collider_component.h"
 #include "../radix/src/transform_component.h"
 #include "../radix/src/static_sprite_component.h"
@@ -28,8 +31,9 @@ TileMap* tile_map;
 SDL_Event Game::input_event;
 SDL_Renderer* Game::renderer;
 EntityManager* entity_manager = new EntityManager();
-SDL_Rect Game::camera = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 AssetManager* Game::asset_manager = new AssetManager();
+SDL_Rect Game::camera = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
+CollisionManager* collision_manager = new CollisionManager(entity_manager);
 
 Game::Game()
 {
@@ -194,7 +198,16 @@ void Game::update_camera_movement()
 
 void Game::check_collisions()
 {
-	Collisions collision_type = entity_manager->check_collisions();
+	Collision player_enemy_collision = {PLAYER_COLLIDER, ENEMY_COLLIDER, PLAYER_ENEMY_COLLISION};
+	Collision player_projectile_collision = {PLAYER_COLLIDER, ENEMY_PROJECTILE_COLLIDER, PLAYER_PROJECTILE_COLLISION};
+	Collision player_level_complete_collision = {PLAYER_COLLIDER, LEVEL_COMPLETE_COLLIDER, PLAYER_LEVEL_COMPLETE_COLLISION};
+	std::vector<Collision> collisions;
+
+	collisions.push_back(player_enemy_collision);
+	collisions.push_back(player_projectile_collision);
+	collisions.push_back(player_level_complete_collision);
+
+	unsigned int collision_type = collision_manager->check_collisions(collisions, NO_COLLISION);
 
 	if(collision_type == PLAYER_ENEMY_COLLISION)
 	{
