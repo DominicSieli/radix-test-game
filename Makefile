@@ -17,12 +17,12 @@ SDL = -lSDL3 -lSDL3_image -lSDL3_ttf -lSDL3_mixer
 WARNINGS = -w -Wall -Wextra -Wpedantic -Wfatal-errors
 CHECKFLAGS = --quiet --enable=all --force --error-exitcode=1
 
-lib_build:
+debug_from_lib:
 	mkdir -p $(DIR);
 	$(CXX) $(STD) $(WARNINGS) $(SRC) $(LFLAGS) $(RADIX) $(SDL) $(OUT) $(BINPATH);
 	$(BINPATH)
 
-test_build:
+debug_build:
 	mkdir -p $(DIR);
 	$(CXX) $(STD) $(WARNINGS) $(SRC) $(RADIX_CPP) $(IFLAGS) $(RADIX_H) $(LFLAGS) $(SDL) $(OUT) $(BINPATH);
 	$(BINPATH)
