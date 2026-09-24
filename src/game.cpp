@@ -85,7 +85,7 @@ bool Game::is_running()
 	return this->running;
 }
 
-Entity* player(Game::entity_manager.add_entity("player", 2));
+Entity* player = Game::entity_manager.add_entity("player", 2);
 
 void Game::load_level(int level_number)
 {
@@ -100,50 +100,52 @@ void Game::load_level(int level_number)
 	tile_map = new TileMap(JUNGLE_MAP_TEXTURE_ID, 2, 32);
 	tile_map->load_map(JUNGLE_MAP_PATH, 25, 20, "tile", 0);
 
-	Entity* level_name(entity_manager.add_entity("LabelLevelName", 9));
+	Entity* level_name = entity_manager.add_entity("LabelLevelName", 9);
 	level_name->add_component<TextComponent>(10, 10, "Level: 1", CHARRIOT_ID, WHITE);
 
 	std::map<unsigned int, Animation> chopper_animations;
 
-	Animation up = Animation(3, 2, 9);
-	Animation down = Animation(0, 2, 9);
-	Animation left = Animation(2, 2, 9);
-	Animation right = Animation(1, 2, 9);
 
-	chopper_animations.emplace(PLAYER_UP, up);
-	chopper_animations.emplace(PLAYER_DOWN, down);
-	chopper_animations.emplace(PLAYER_LEFT, left);
-	chopper_animations.emplace(PLAYER_RIGHT, right);
+	Animation player_up = Animation(3, 2, 9);
+	Animation player_down = Animation(0, 2, 9);
+	Animation player_left = Animation(2, 2, 9);
+	Animation player_right = Animation(1, 2, 9);
+
+	chopper_animations.emplace(PLAYER_UP, player_up);
+	chopper_animations.emplace(PLAYER_DOWN, player_down);
+	chopper_animations.emplace(PLAYER_LEFT, player_left);
+	chopper_animations.emplace(PLAYER_RIGHT, player_right);
 
 	player->add_component<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
-	player->add_component<AnimatedSpriteComponent>(CHOPPER_TEXTURE_ID, chopper_animations, PLAYER_DOWN, false);
+	player->add_component<AnimatedSpriteComponent>(chopper_animations, CHOPPER_TEXTURE_ID, PLAYER_DOWN, false);
 	player->add_component<ControlsComponent>(&input_event);
 	player->add_component<ColliderComponent>(PLAYER_COLLIDER_TAG, 240, 106, 32, 32);
 
-	Entity* tank(entity_manager.add_entity("tank", 1));
+	Entity* tank = entity_manager.add_entity("tank", 1);
 	tank->add_component<TransformComponent>(250, 495, 5, 0, 32, 32, 1);
 	tank->add_component<StaticSpriteComponent>(TANK_TEXTURE_ID, false);
 	tank->add_component<ColliderComponent>(ENEMY_COLLIDER_TAG, 150, 495, 32, 32);
 
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
-	Entity* projectile(entity_manager.add_entity("projectile", 1));
+	Entity* projectile = entity_manager.add_entity("projectile", 1);
 	projectile->add_component<TransformComponent>(tank_transform->position.x+16, tank_transform->position.y+16, 0, 0, 4, 4, 1);
 	projectile->add_component<StaticSpriteComponent>(ENEMY_BULLET_TEXTURE_ID, false);
 	projectile->add_component<ColliderComponent>(ENEMY_BULLET_COLLIDER_TAG, tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
 	projectile->add_component<SpawnerComponent>(50, 0, 200, true);
 
-	Entity* heliport(entity_manager.add_entity("heliport", 1));
+	Entity* heliport = entity_manager.add_entity("heliport", 1);
 	heliport->add_component<TransformComponent>(470, 420, 0, 0, 32, 32, 1);
 	heliport->add_component<StaticSpriteComponent>(HELIPORT_TEXTURE_ID, false);
 	heliport->add_component<ColliderComponent>(HELIPORT_COLLIDER_TAG, 470, 420, 32, 32);
 
 	std::map<unsigned int, Animation> radar_animation;
-	Animation rotate = Animation(0, 8, 150);
-	radar_animation.emplace(0, rotate);
 
-	Entity* radar(entity_manager.add_entity("radar", 9));
+	Animation rotate_radar = Animation(0, 8, 150);
+	radar_animation.emplace(0, rotate_radar);
+
+	Entity* radar = entity_manager.add_entity("radar", 9);
 	radar->add_component<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
-	radar->add_component<AnimatedSpriteComponent>(RADAR_TEXTURE_ID, radar_animation, 0, true);
+	radar->add_component<AnimatedSpriteComponent>(radar_animation, RADAR_TEXTURE_ID, 0, true);
 }
 
 void Game::input()
@@ -202,10 +204,11 @@ void Game::update_camera_movement()
 
 void Game::check_collisions()
 {
-	Collision player_enemy_collision = {PLAYER_COLLIDER_TAG, ENEMY_COLLIDER_TAG, PLAYER_ENEMY_COLLISION};
-	Collision player_heliport_collision = {PLAYER_COLLIDER_TAG, HELIPORT_COLLIDER_TAG, PLAYER_HELIPORT_COLLISION};
-	Collision player_enemy_projectile_collision = {PLAYER_COLLIDER_TAG, ENEMY_BULLET_COLLIDER_TAG, PLAYER_ENEMY_BULLET_COLLISION};
 	std::vector<Collision> collisions;
+
+	Collision player_enemy_collision = Collision(PLAYER_COLLIDER_TAG, ENEMY_COLLIDER_TAG, PLAYER_ENEMY_COLLISION);
+	Collision player_heliport_collision = Collision(PLAYER_COLLIDER_TAG, HELIPORT_COLLIDER_TAG, PLAYER_HELIPORT_COLLISION);
+	Collision player_enemy_projectile_collision = Collision(PLAYER_COLLIDER_TAG, ENEMY_BULLET_COLLIDER_TAG, PLAYER_ENEMY_BULLET_COLLISION);
 
 	collisions.push_back(player_enemy_collision);
 	collisions.push_back(player_heliport_collision);
