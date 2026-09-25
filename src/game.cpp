@@ -127,11 +127,11 @@ void Game::load_level(int level_number)
 	tank->add_component<ColliderComponent>(ENEMY_COLLIDER_TAG, 150, 495, 32, 32);
 
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
-	Entity* projectile = entity_manager.add_entity("projectile", 1);
-	projectile->add_component<TransformComponent>(tank_transform->position.x+16, tank_transform->position.y+16, 0, 0, 4, 4, 1);
-	projectile->add_component<StaticSpriteComponent>(ENEMY_BULLET_TEXTURE_ID, false);
-	projectile->add_component<ColliderComponent>(ENEMY_BULLET_COLLIDER_TAG, tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
-	projectile->add_component<SpawnerComponent>(50, 0, 200, true);
+	Entity* bullet = entity_manager.add_entity("bullet", 1);
+	bullet->add_component<TransformComponent>(tank_transform->position.x+16, tank_transform->position.y+16, 0, 0, 4, 4, 1);
+	bullet->add_component<StaticSpriteComponent>(ENEMY_BULLET_TEXTURE_ID, false);
+	bullet->add_component<ColliderComponent>(ENEMY_BULLET_COLLIDER_TAG, tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
+	bullet->add_component<SpawnerComponent>(50, 0, 200, true);
 
 	Entity* heliport = entity_manager.add_entity("heliport", 1);
 	heliport->add_component<TransformComponent>(470, 420, 0, 0, 32, 32, 1);
