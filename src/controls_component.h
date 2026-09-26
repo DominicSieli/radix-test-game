@@ -21,7 +21,7 @@ class ControlsComponent: public Component
 
 		void initialize() override;
 
-		void update(float) override;
+		void update(double) override;
 };
 
 #endif

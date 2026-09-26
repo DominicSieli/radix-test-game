@@ -32,6 +32,7 @@
 using namespace Radix;
 
 TileMap* tile_map;
+double Game::delta_time;
 SDL_Event Game::input_event;
 SDL_Renderer* Game::renderer;
 EntityManager Game::entity_manager;
@@ -117,25 +118,28 @@ void Game::load_level(int level_number)
 	chopper_animations.emplace(PLAYER_LEFT, player_left);
 	chopper_animations.emplace(PLAYER_RIGHT, player_right);
 
-	player->add_component<TransformComponent>(Vector2(240, 106), Vector2(0, 0), Vector2(32, 32), 0, 1);
+	player->add_component<TransformComponent>(Vector2<unsigned int>(240, 106), Vector2<unsigned int>(32, 32), Vector2<double>(1, 1), 0);
 	player->add_component<AnimatedSpriteComponent>(chopper_animations, CHOPPER_TEXTURE_ID, PLAYER_DOWN, false);
 	player->add_component<ControlsComponent>(&input_event);
 	player->add_component<ColliderComponent>(PLAYER_COLLIDER_TAG, 240, 106, 32, 32);
 
 	Entity* tank = entity_manager.add_entity("tank", 1);
-	tank->add_component<TransformComponent>(Vector2(250, 495), Vector2(5, 0), Vector2(32, 32), 0, 1);
+	tank->add_component<TransformComponent>(Vector2<unsigned int>(250, 495), Vector2<unsigned int>(32, 32), Vector2<double>(1, 1), 0);
 	tank->add_component<StaticSpriteComponent>(TANK_TEXTURE_ID, false);
 	tank->add_component<ColliderComponent>(ENEMY_COLLIDER_TAG, 150, 495, 32, 32);
-
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
+	tank_transform->translate(Vector2<unsigned int>(1000, 0));
+
 	Entity* bullet = entity_manager.add_entity("bullet", 1);
-	bullet->add_component<TransformComponent>(Vector2(tank_transform->position.x+16, tank_transform->position.y+16), Vector2(0, 0), Vector2(4, 4), 0, 1);
+	bullet->add_component<TransformComponent>(Vector2<unsigned int>(tank_transform->position.x+16, tank_transform->position.y+16), Vector2<unsigned int>(4, 4), Vector2<double>(1, 1), 0);
 	bullet->add_component<StaticSpriteComponent>(ENEMY_BULLET_TEXTURE_ID, false);
 	bullet->add_component<ColliderComponent>(ENEMY_BULLET_COLLIDER_TAG, tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
-	bullet->add_component<SpawnerComponent>(50, 0, 200, true);
+	bullet->add_component<SpawnerComponent>(200, true);
+	TransformComponent* bullet_transform = bullet->get_component<TransformComponent>();
+	bullet_transform->translate(Vector2<unsigned int>(2000, 0));
 
 	Entity* heliport = entity_manager.add_entity("heliport", 1);
-	heliport->add_component<TransformComponent>(Vector2(470, 420), Vector2(0, 0), Vector2(32, 32), 0, 1);
+	heliport->add_component<TransformComponent>(Vector2<unsigned int>(470, 420), Vector2<unsigned int>(32, 32), Vector2<double>(1, 1), 0);
 	heliport->add_component<StaticSpriteComponent>(HELIPORT_TEXTURE_ID, false);
 	heliport->add_component<ColliderComponent>(HELIPORT_COLLIDER_TAG, 470, 420, 32, 32);
 
@@ -145,7 +149,7 @@ void Game::load_level(int level_number)
 	radar_animation.emplace(0, rotate_radar);
 
 	Entity* radar = entity_manager.add_entity("radar", 9);
-	radar->add_component<TransformComponent>(Vector2(720, 15), Vector2(0, 0), Vector2(64, 64), 0, 1);
+	radar->add_component<TransformComponent>(Vector2<unsigned int>(720, 15), Vector2<unsigned int>(64, 64), Vector2<double>(1, 1), 0);
 	radar->add_component<AnimatedSpriteComponent>(radar_animation, RADAR_TEXTURE_ID, 0, true);
 }
 
@@ -163,9 +167,9 @@ void Game::input()
 
 void Game::update()
 {
-	float delta_time = (SDL_GetTicks() - ticks_last_frame) / 1000.00f;
+	delta_time = (SDL_GetTicks() - ticks_last_frame) / 1000.00;
 
-	delta_time = (delta_time > 0.05f) ? 0.05f : delta_time;
+	delta_time = (delta_time > 0.05) ? 0.05 : delta_time;
 
 	this->ticks_last_frame = SDL_GetTicks();
 
