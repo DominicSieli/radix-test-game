@@ -3,14 +3,14 @@
 #include <SDL3/SDL.h>
 
 #include "settings.h"
-#include "controls_component.h"
 
 #include "colors.h"
 #include "font_id.h"
 #include "texture_id.h"
 #include "asset_paths.h"
+#include "entity_factory.h"
 #include "collision_tags.h"
-#include "player_animations.h"
+
 #include "../radix/src/game.h"
 #include "../radix/src/entity.h"
 #include "../radix/src/vector_2.h"
@@ -31,6 +31,7 @@
 
 using namespace Radix;
 
+Entity* player;
 TileMap* tile_map;
 float Game::delta_time;
 SDL_Event Game::input_event;
@@ -87,8 +88,6 @@ bool Game::is_running()
 	return this->running;
 }
 
-Entity* player = Game::entity_manager.add_entity("player", 2);
-
 void Game::load_level(unsigned int level_number)
 {
 	asset_manager.add_font(CHARRIOT_ID, CHARRIOT_TTF_PATH, 24);
@@ -99,29 +98,13 @@ void Game::load_level(unsigned int level_number)
 	asset_manager.add_texture(JUNGLE_MAP_TEXTURE_ID, JUNGLE_PNG_PATH);
 	asset_manager.add_texture(ENEMY_BULLET_TEXTURE_ID, BULLET_PNG_PATH);
 
+	player = create_player(Vector2<double>(240, 160));
+
 	tile_map = new TileMap(JUNGLE_MAP_TEXTURE_ID, 2, 32);
 	tile_map->load_map(JUNGLE_MAP_PATH, 25, 20, "tile", 0);
 
 	Entity* level_name = entity_manager.add_entity("LabelLevelName", 9);
 	level_name->add_component<TextComponent>(10, 10, "Level: 1", CHARRIOT_ID, WHITE);
-
-	std::map<unsigned int, Animation> chopper_animations;
-
-
-	Animation player_up = Animation(3, 2, 9);
-	Animation player_down = Animation(0, 2, 9);
-	Animation player_left = Animation(2, 2, 9);
-	Animation player_right = Animation(1, 2, 9);
-
-	chopper_animations.emplace(PLAYER_UP, player_up);
-	chopper_animations.emplace(PLAYER_DOWN, player_down);
-	chopper_animations.emplace(PLAYER_LEFT, player_left);
-	chopper_animations.emplace(PLAYER_RIGHT, player_right);
-
-	player->add_component<TransformComponent>(Vector2<double>(240, 106), Vector2<float>(1, 1), 0);
-	player->add_component<AnimatedSpriteComponent>(chopper_animations, CHOPPER_TEXTURE_ID, PLAYER_DOWN, Vector2<int>(32, 32), false);
-	player->add_component<ControlsComponent>(&input_event);
-	player->add_component<ColliderComponent>(PLAYER_COLLIDER_TAG, Vector2<int>(32, 32));
 
 	Entity* tank = entity_manager.add_entity("tank", 1);
 	tank->add_component<TransformComponent>(Vector2<double>(250, 495), Vector2<float>(1, 1), 0);

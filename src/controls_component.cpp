@@ -1,14 +1,16 @@
 #include <SDL3/SDL.h>
 
-#include "../radix/src/game.h"
 #include "player_animations.h"
 #include "controls_component.h"
+
+#include "../radix/src/game.h"
 #include "../radix/src/vector_2.h"
 
 ControlsComponent::ControlsComponent()
 {}
 
-ControlsComponent::ControlsComponent(SDL_Event* event): event{event}
+ControlsComponent::ControlsComponent(SDL_Event* event)
+	: event{event}
 {}
 
 void ControlsComponent::initialize()
