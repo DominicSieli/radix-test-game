@@ -32,7 +32,7 @@
 using namespace Radix;
 
 TileMap* tile_map;
-double Game::delta_time;
+float Game::delta_time;
 SDL_Event Game::input_event;
 SDL_Renderer* Game::renderer;
 EntityManager Game::entity_manager;
@@ -89,7 +89,7 @@ bool Game::is_running()
 
 Entity* player = Game::entity_manager.add_entity("player", 2);
 
-void Game::load_level(int level_number)
+void Game::load_level(unsigned int level_number)
 {
 	asset_manager.add_font(CHARRIOT_ID, CHARRIOT_TTF_PATH, 24);
 	asset_manager.add_texture(TANK_TEXTURE_ID, TANK_PNG_PATH);
@@ -118,30 +118,30 @@ void Game::load_level(int level_number)
 	chopper_animations.emplace(PLAYER_LEFT, player_left);
 	chopper_animations.emplace(PLAYER_RIGHT, player_right);
 
-	player->add_component<TransformComponent>(Vector2<unsigned int>(240, 106), Vector2<unsigned int>(32, 32), Vector2<double>(1, 1), 0);
-	player->add_component<AnimatedSpriteComponent>(chopper_animations, CHOPPER_TEXTURE_ID, PLAYER_DOWN, false);
+	player->add_component<TransformComponent>(Vector2<double>(240, 106), Vector2<float>(1, 1), 0);
+	player->add_component<AnimatedSpriteComponent>(chopper_animations, CHOPPER_TEXTURE_ID, PLAYER_DOWN, Vector2<int>(32, 32), false);
 	player->add_component<ControlsComponent>(&input_event);
-	player->add_component<ColliderComponent>(PLAYER_COLLIDER_TAG, 240, 106, 32, 32);
+	player->add_component<ColliderComponent>(PLAYER_COLLIDER_TAG, Vector2<int>(32, 32));
 
 	Entity* tank = entity_manager.add_entity("tank", 1);
-	tank->add_component<TransformComponent>(Vector2<unsigned int>(250, 495), Vector2<unsigned int>(32, 32), Vector2<double>(1, 1), 0);
-	tank->add_component<StaticSpriteComponent>(TANK_TEXTURE_ID, false);
-	tank->add_component<ColliderComponent>(ENEMY_COLLIDER_TAG, 150, 495, 32, 32);
+	tank->add_component<TransformComponent>(Vector2<double>(250, 495), Vector2<float>(1, 1), 0);
+	tank->add_component<StaticSpriteComponent>(TANK_TEXTURE_ID, Vector2<int>(32, 32), false);
+	tank->add_component<ColliderComponent>(ENEMY_COLLIDER_TAG, Vector2<int>(32, 32));
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
-	tank_transform->translate(Vector2<unsigned int>(1000, 0));
+	tank_transform->translate(Vector2<double>(1000, 0));
 
 	Entity* bullet = entity_manager.add_entity("bullet", 1);
-	bullet->add_component<TransformComponent>(Vector2<unsigned int>(tank_transform->position.x+16, tank_transform->position.y+16), Vector2<unsigned int>(4, 4), Vector2<double>(1, 1), 0);
-	bullet->add_component<StaticSpriteComponent>(ENEMY_BULLET_TEXTURE_ID, false);
-	bullet->add_component<ColliderComponent>(ENEMY_BULLET_COLLIDER_TAG, tank_transform->position.x+16, tank_transform->position.y+16, 4, 4);
+	bullet->add_component<TransformComponent>(Vector2<double>(tank_transform->position.x+16, tank_transform->position.y+16), Vector2<float>(1, 1), 0);
+	bullet->add_component<StaticSpriteComponent>(ENEMY_BULLET_TEXTURE_ID, Vector2<int>(4, 4), false);
+	bullet->add_component<ColliderComponent>(ENEMY_BULLET_COLLIDER_TAG, Vector2<int>(4, 4));
 	bullet->add_component<SpawnerComponent>(200, true);
 	TransformComponent* bullet_transform = bullet->get_component<TransformComponent>();
-	bullet_transform->translate(Vector2<unsigned int>(2000, 0));
+	bullet_transform->translate(Vector2<double>(2000, 0));
 
 	Entity* heliport = entity_manager.add_entity("heliport", 1);
-	heliport->add_component<TransformComponent>(Vector2<unsigned int>(470, 420), Vector2<unsigned int>(32, 32), Vector2<double>(1, 1), 0);
-	heliport->add_component<StaticSpriteComponent>(HELIPORT_TEXTURE_ID, false);
-	heliport->add_component<ColliderComponent>(HELIPORT_COLLIDER_TAG, 470, 420, 32, 32);
+	heliport->add_component<TransformComponent>(Vector2<double>(470, 420), Vector2<float>(1, 1), 0);
+	heliport->add_component<StaticSpriteComponent>(HELIPORT_TEXTURE_ID, Vector2<int>(32, 32), false);
+	heliport->add_component<ColliderComponent>(HELIPORT_COLLIDER_TAG, Vector2<int>(32, 32));
 
 	std::map<unsigned int, Animation> radar_animation;
 
@@ -149,8 +149,8 @@ void Game::load_level(int level_number)
 	radar_animation.emplace(0, rotate_radar);
 
 	Entity* radar = entity_manager.add_entity("radar", 9);
-	radar->add_component<TransformComponent>(Vector2<unsigned int>(720, 15), Vector2<unsigned int>(64, 64), Vector2<double>(1, 1), 0);
-	radar->add_component<AnimatedSpriteComponent>(radar_animation, RADAR_TEXTURE_ID, 0, true);
+	radar->add_component<TransformComponent>(Vector2<double>(720, 15), Vector2<float>(1, 1), 0);
+	radar->add_component<AnimatedSpriteComponent>(radar_animation, RADAR_TEXTURE_ID, 0, Vector2<int>(64, 64), true);
 }
 
 void Game::input()
@@ -167,9 +167,9 @@ void Game::input()
 
 void Game::update()
 {
-	delta_time = (SDL_GetTicks() - ticks_last_frame) / 1000.00;
+	delta_time = (SDL_GetTicks() - ticks_last_frame) / 1000.00f;
 
-	delta_time = (delta_time > 0.05) ? 0.05 : delta_time;
+	delta_time = (delta_time > 0.05f) ? 0.05f : delta_time;
 
 	this->ticks_last_frame = SDL_GetTicks();
 
@@ -246,7 +246,7 @@ void Game::process_gameover()
 	running = false;
 }
 
-void Game::process_next_level(int level_number)
+void Game::process_next_level(unsigned int level_number)
 {
 	std::cout << "Next Level\n";
 	running = false;
