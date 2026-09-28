@@ -92,7 +92,7 @@ void Game::load_level(unsigned int level_number)
 {
 	asset_manager.add_font(CHARRIOT_ID, CHARRIOT_TTF_PATH, 24);
 	asset_manager.add_texture(TANK_TEXTURE_ID, TANK_PNG_PATH);
-	asset_manager.add_texture(CHOPPER_TEXTURE_ID, CHOPPER_PNG_PATH);
+	//asset_manager.add_texture(CHOPPER_TEXTURE_ID, CHOPPER_PNG_PATH);
 	asset_manager.add_texture(RADAR_TEXTURE_ID, RADAR_PNG_PATH);
 	asset_manager.add_texture(HELIPORT_TEXTURE_ID, HELIPORT_PNG_PATH);
 	asset_manager.add_texture(JUNGLE_MAP_TEXTURE_ID, JUNGLE_PNG_PATH);
