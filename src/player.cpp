@@ -1,10 +1,8 @@
-#include "map"
-
+#include "player.h"
 #include "texture_id.h"
 #include "collision_tags.h"
-#include "entity_factory.h"
 #include "player_animations.h"
-#include "controls_component.h"
+#include "player_script_component.h"
 
 #include "../radix/src/game.h"
 #include "../radix/src/animation.h"
@@ -15,8 +13,9 @@ Entity* create_player(Vector2<double> position)
 {
 	Entity* player = Game::entity_manager.add_entity("player", 2);
 
-	const char* CHOPPER_PNG = "./assets/images/chopper-spritesheet.png";
-	Game::asset_manager.add_texture(CHOPPER_TEXTURE_ID, CHOPPER_PNG);
+	const char* CHOPPER_PNG_PATH = "./assets/images/chopper-spritesheet.png";
+
+	Game::asset_manager.add_texture(CHOPPER_TEXTURE_ID, CHOPPER_PNG_PATH);
 
 	std::map<unsigned int, Animation> chopper_animations;
 
@@ -32,7 +31,7 @@ Entity* create_player(Vector2<double> position)
 
 	player->add_component<TransformComponent>(Vector2<double>(240, 106), Vector2<float>(1, 1), 0);
 	player->add_component<AnimatedSpriteComponent>(chopper_animations, CHOPPER_TEXTURE_ID, PLAYER_DOWN, Vector2<int>(32, 32), false);
-	player->add_component<ControlsComponent>(&Game::input_event);
+	player->add_component<PlayerScriptComponent>();
 	player->add_component<ColliderComponent>(PLAYER_COLLIDER_TAG, Vector2<int>(32, 32));
 
 	return player;

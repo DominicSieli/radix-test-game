@@ -4,11 +4,11 @@
 
 #include "settings.h"
 
+#include "player.h"
 #include "colors.h"
 #include "font_id.h"
 #include "texture_id.h"
 #include "asset_paths.h"
-#include "entity_factory.h"
 #include "collision_tags.h"
 
 #include "../radix/src/game.h"

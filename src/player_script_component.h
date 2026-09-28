@@ -8,16 +8,15 @@
 
 using namespace Radix;
 
-class ControlsComponent: public Component
+class PlayerScriptComponent: public Component
 {
 	public:
-		SDL_Event* event;
 		TransformComponent* transform_component;
 		AnimatedSpriteComponent* animated_sprite_component;
 
-		ControlsComponent();
+		PlayerScriptComponent();
 
-		ControlsComponent(SDL_Event*);
+		~PlayerScriptComponent();
 
 		void initialize() override;
 
