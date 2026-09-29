@@ -22,7 +22,6 @@
 #include "../radix/src/text_component.h"
 #include "../radix/src/entity_manager.h"
 #include "../radix/src/render_manager.h"
-#include "../radix/src/spawner_component.h"
 #include "../radix/src/collision_manager.h"
 #include "../radix/src/collider_component.h"
 #include "../radix/src/transform_component.h"
@@ -117,7 +116,6 @@ void Game::load_level(unsigned int level_number)
 	bullet->add_component<TransformComponent>(Vector2<double>(tank_transform->position.x+16, tank_transform->position.y+16), Vector2<float>(1, 1), 0);
 	bullet->add_component<StaticSpriteComponent>(ENEMY_BULLET_TEXTURE_ID, Vector2<int>(4, 4), false);
 	bullet->add_component<ColliderComponent>(ENEMY_BULLET_COLLIDER_TAG, Vector2<int>(4, 4));
-	bullet->add_component<SpawnerComponent>(200, true);
 	TransformComponent* bullet_transform = bullet->get_component<TransformComponent>();
 	bullet_transform->translate(Vector2<double>(2000, 0));
 
