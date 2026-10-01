@@ -1,41 +1,53 @@
-OUT = -o
-DIR = bin
-CXX = g++
-BIN = game
-IFLAGS = -I
-LFLAGS = -L.
-STD = -std=c++23
-CHECK = cppcheck
-SRC = ./src/*.cpp
-CHECKSTD = --std=c++23
-OPTIMIZATION = -O3 -flto
-BINPATH = ./$(DIR)/$(BIN)
-RADIX_H = ./radix/src
-RADIX_CPP = ./radix/src/*.cpp
-RADIX = "./radix/lib/lib_radix.a"
-SDL = -lSDL3 -lSDL3_image -lSDL3_ttf -lSDL3_mixer
-WARNINGS = -w -Wall -Wextra -Wpedantic -Wfatal-errors
-CHECKFLAGS = --quiet --enable=all --force --error-exitcode=1
+DIR			 := bin
+CXX			 := g++
+BIN			 := game
+CHECK		 := cppcheck
 
-debug_from_lib:
-	mkdir -p $(DIR);
-	$(CXX) $(STD) $(WARNINGS) $(SRC) $(LFLAGS) $(RADIX) $(SDL) $(OUT) $(BINPATH);
+STD			 := -std=c++23
+WARNINGS	 := -Wall -Wextra -Wpedantic -Wfatal-errors
+OPTIMIZATION := -O3 -flto
+
+SRC			 := $(wildcard src/*.cpp)
+RADIX_SRC	 := $(wildcard radix/src/*.cpp)
+
+RADIX_H		 := ./radix/src
+RADIX_LIB	 := ./radix/lib/lib_radix.a
+BINPATH		 := $(DIR)/$(BIN)
+
+CPPFLAGS	 := -I$(RADIX_H)
+LDFLAGS		 := -L./radix/lib
+LDLIBS		 := -lSDL3 -lSDL3_image -lSDL3_ttf -lSDL3_mixer
+
+CHECKFLAGS	 := --std=c++23 --quiet --enable=all --force --error-exitcode=1
+
+.PHONY: link_lib_debug link_lib_optimized build_debug build_optimized clean check run
+
+link_lib_debug:
+	mkdir -p $(DIR)
+	$(CXX) $(STD) $(WARNINGS) $(SRC) $(RADIX_LIB) $(LDFLAGS) $(LDLIBS) -o $(BINPATH)
 	$(BINPATH)
 
-debug_build:
-	mkdir -p $(DIR);
-	$(CXX) $(STD) $(WARNINGS) $(SRC) $(RADIX_CPP) $(IFLAGS) $(RADIX_H) $(LFLAGS) $(SDL) $(OUT) $(BINPATH);
+
+link_lib_optimized:
+	mkdir -p $(DIR)
+	$(CXX) $(STD) $(WARNINGS) $(OPTIMIZATION) $(SRC) $(RADIX_LIB) $(LDFLAGS) $(LDLIBS) -o $(BINPATH)
 	$(BINPATH)
 
-release_build:
-	mkdir -p $(DIR);
-	$(CXX) $(STD) $(WARNINGS) $(OPTIMIZATION) $(SRC) $(RADIX_CPP) $(IFLAGS) $(RADIX_H) $(LFLAGS) $(SDL) $(OUT) $(BINPATH);
+build_debug:
+	mkdir -p $(DIR)
+	$(CXX) $(STD) $(WARNINGS) $(SRC) $(RADIX_SRC) $(CPPFLAGS) $(LDLIBS) -o $(BINPATH)
+	$(BINPATH)
+
+build_optimized:
+	mkdir -p $(DIR)
+	$(CXX) $(STD) $(WARNINGS) $(OPTIMIZATION) $(SRC) $(RADIX_SRC) $(CPPFLAGS) $(LDLIBS) -o $(BINPATH)
+	$(BINPATH)
 
 clean:
-	rm -rf $(DIR);
+	rm -rf $(DIR)
 
 check:
-	$(CHECK) $(CHECKSTD) $(CHECKFLAGS) $(SRC);
+	$(CHECK) $(CHECKFLAGS) $(SRC) $(RADIX_SRC)
 
 run:
 	$(BINPATH)

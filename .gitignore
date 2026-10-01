@@ -9,4 +9,6 @@
 !assets/**
 !LICENSE
 !Makefile
+!README.md
 !.gitignore
+!.clang-tidy
