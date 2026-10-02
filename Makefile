@@ -20,7 +20,7 @@ LDLIBS		 := -lSDL3 -lSDL3_image -lSDL3_ttf -lSDL3_mixer
 
 CHECKFLAGS	 := --std=c++23 --quiet --enable=all --force --error-exitcode=1
 
-.PHONY: link_lib_debug link_lib_optimized build_debug build_optimized clean check run
+.PHONY: link_lib_debug link_lib_optimized build_debug build_optimized clean check run compile_commands
 
 link_lib_debug:
 	mkdir -p $(DIR)
@@ -45,9 +45,14 @@ build_optimized:
 
 clean:
 	rm -rf $(DIR)
+	rm -rf .cache
+	rm -f compile_commands.json
 
 check:
 	$(CHECK) $(CHECKFLAGS) $(SRC) $(RADIX_SRC)
 
 run:
 	$(BINPATH)
+
+compile_commands:
+	bear -- make
