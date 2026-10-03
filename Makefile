@@ -18,8 +18,6 @@ CPPFLAGS	 := -I$(RADIX_H)
 LDFLAGS		 := -L./radix/lib
 LDLIBS		 := -lSDL3 -lSDL3_image -lSDL3_ttf -lSDL3_mixer
 
-CHECKFLAGS	 := --std=c++23 --quiet --enable=all --force --error-exitcode=1
-
 .PHONY: link_lib_debug link_lib_optimized build_debug build_optimized clean check run compile_commands
 
 link_lib_debug:
@@ -49,7 +47,8 @@ clean:
 	rm -f compile_commands.json
 
 check:
-	$(CHECK) $(CHECKFLAGS) $(SRC) $(RADIX_SRC)
+	bear -- make
+	$(CHECK) $(SRC) $(RADIX_SRC)
 
 run:
 	$(BINPATH)

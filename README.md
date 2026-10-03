@@ -10,6 +10,7 @@ This project was built and tested on **Arch Linux**.
 * SDL3_image
 * SDL3_mixer
 * SDL3_ttf
+* bear
 * clang-tidy
 
 ## How to Build
@@ -56,4 +57,10 @@ Clean project directory
 
 ```bash
 make clean
+```
+
+Generate compile_commands.json
+
+```bash
+make compile_commands
 ```
