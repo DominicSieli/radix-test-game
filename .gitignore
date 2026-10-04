@@ -3,7 +3,8 @@
 
 # Except
 !src/
-!src/**
+!src/*.h
+!src/*.cpp
 !.clangd
 !assets/
 !assets/**
