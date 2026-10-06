@@ -32,6 +32,8 @@ using namespace Radix;
 
 Entity* player;
 TileMap* tile_map;
+Uint64 current_tick;
+Uint64 previous_tick;
 float Game::delta_time;
 SDL_Event Game::input_event;
 SDL_Renderer* Game::renderer;
@@ -43,6 +45,8 @@ SDL_Rect Game::camera = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 
 Game::Game()
 {
+	previous_tick = SDL_GetPerformanceCounter();
+
 	if(!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
 	{
 		std::cerr << "Error Initializing SDL\n";
@@ -109,7 +113,7 @@ void Game::load_level(unsigned int level_number)
 	tank->add_component<StaticSpriteComponent>(TANK_TEXTURE_ID, Vector2<float>(32, 32), false);
 	tank->add_component<ColliderComponent>(ENEMY_COLLIDER_TAG, Vector2<int>(32, 32));
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
-	tank_transform->translate(Vector2<float>(1000, 0));
+	tank_transform->translate(Vector2<float>(10000, 0));
 
 	Entity* bullet = entity_manager.add_entity("bullet", 1);
 	bullet->add_component<TransformComponent>(Vector2<float>(tank_transform->position.x+16, tank_transform->position.y+16), Vector2<float>(1, 1), 0);
@@ -147,11 +151,11 @@ void Game::input()
 
 void Game::update()
 {
-	delta_time = (SDL_GetTicks() - ticks_last_frame) / 1000.00f;
+	current_tick = SDL_GetPerformanceCounter();
 
-	delta_time = (delta_time > 0.05f) ? 0.05f : delta_time;
+	delta_time = static_cast<float>(current_tick - previous_tick) / static_cast<float>(SDL_GetPerformanceFrequency());
 
-	this->ticks_last_frame = SDL_GetTicks();
+	previous_tick = current_tick;
 
 	entity_manager.update(delta_time);
 

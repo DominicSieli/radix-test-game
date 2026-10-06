@@ -23,59 +23,60 @@ void PlayerScriptComponent::update(float delta_time)
 {
 	if(Game::input_event.type == SDL_EVENT_KEY_DOWN)
 	{
-		float speed = 400;
+		float speed = 10000.00f * delta_time;
 
 		if(Game::input_event.key.key == SDLK_UP)
 		{
-			this->transform_component->translate(Vector2<float>(0, -speed));
+			this->transform_component->translate(Vector2<float>(0.00f, -speed));
 			this->animated_sprite_component->play(PLAYER_UP);
 		}
 
 		if(Game::input_event.key.key == SDLK_DOWN)
 		{
-			this->transform_component->translate(Vector2<float>(0, speed));
+			this->transform_component->translate(Vector2<float>(0.00f, speed));
 			animated_sprite_component->play(PLAYER_DOWN);
 		}
 
 		if(Game::input_event.key.key == SDLK_LEFT)
 		{
-			this->transform_component->translate(Vector2<float>(-speed, 0));
+			this->transform_component->translate(Vector2<float>(-speed, 0.00f));
 			animated_sprite_component->play(PLAYER_LEFT);
 		}
 
 		if(Game::input_event.key.key == SDLK_RIGHT)
 		{
-			this->transform_component->translate(Vector2<float>(speed, 0));
+			this->transform_component->translate(Vector2<float>(speed, 0.00f));
 			animated_sprite_component->play(PLAYER_RIGHT);
 		}
 
 		if(Game::input_event.key.key == SDLK_SPACE)
 		{}
 	}
-
+/*
 	if(Game::input_event.type == SDL_EVENT_KEY_UP)
 	{
 		if(Game::input_event.key.key == SDLK_UP)
 		{
-			this->transform_component->translate(Vector2<float>(0, 0));
+			this->transform_component->translate(Vector2<float>(0.00f, 0.00f));
 		}
 
 		if(Game::input_event.key.key == SDLK_DOWN)
 		{
-			this->transform_component->translate(Vector2<float>(0, 0));
+			this->transform_component->translate(Vector2<float>(0.00f, 0.00f));
 		}
 
 		if(Game::input_event.key.key == SDLK_LEFT)
 		{
-			this->transform_component->translate(Vector2<float>(0, 0));
+			this->transform_component->translate(Vector2<float>(0.00f, 0.00f));
 		}
 
 		if(Game::input_event.key.key == SDLK_RIGHT)
 		{
-			this->transform_component->translate(Vector2<float>(0, 0));
+			this->transform_component->translate(Vector2<float>(0.00f, 0.00f));
 		}
 
 		if(Game::input_event.key.key == SDLK_SPACE)
 		{}
 	}
+*/
 }
