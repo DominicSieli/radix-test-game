@@ -40,6 +40,7 @@ SDL_Renderer* Game::renderer;
 EntityManager* Game::entity_manager;
 AssetManager* Game::asset_manager;
 RenderManager* Game::render_manager;
+const unsigned int render_layer_max = 10;
 CollisionManager* Game::collision_manager;
 SDL_Rect Game::camera = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 
@@ -48,10 +49,11 @@ using namespace Radix;
 Game::Game()
 {
 	previous_tick = SDL_GetPerformanceCounter();
-	Game::entity_manager = new EntityManager();
+
 	Game::asset_manager = new AssetManager();
-	Game::render_manager = new RenderManager();
+	Game::entity_manager = new EntityManager();
 	Game::collision_manager = new CollisionManager();
+	Game::render_manager = new RenderManager(render_layer_max);
 
 	if(!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
 	{
@@ -112,7 +114,7 @@ void Game::load_level(unsigned int level_number)
 	tile_map->load_map(JUNGLE_MAP_PATH, 25, 20, "tile", 0);
 
 	Entity* level_name = this->entity_manager->add_entity("LabelLevelName", 9);
-	level_name->add_component<TextComponent>(10, 10, "Level: 1", CHARRIOT_ID, WHITE);
+	level_name->add_component<TextComponent>(Vector2<float>(10, 10), "Level: 1", CHARRIOT_ID, WHITE);
 
 	Entity* tank = this->entity_manager->add_entity("tank", 1);
 	tank->add_component<TransformComponent>(Vector2<float>(250, 495), Vector2<float>(1, 1), 0);

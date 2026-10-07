@@ -23,7 +23,7 @@ void PlayerScriptComponent::update(float delta_time)
 {
 	if(Game::input_event.type == SDL_EVENT_KEY_DOWN)
 	{
-		float speed = 10000.00f * delta_time;
+		float speed = 10000.00f;
 
 		if(Game::input_event.key.key == SDLK_UP)
 		{
