@@ -37,15 +37,21 @@ Uint64 previous_tick;
 float Game::delta_time;
 SDL_Event Game::input_event;
 SDL_Renderer* Game::renderer;
-EntityManager Game::entity_manager;
-AssetManager Game::asset_manager;
-RenderManager Game::render_manager;
-CollisionManager Game::collision_manager;
+EntityManager* Game::entity_manager;
+AssetManager* Game::asset_manager;
+RenderManager* Game::render_manager;
+CollisionManager* Game::collision_manager;
 SDL_Rect Game::camera = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
+
+using namespace Radix;
 
 Game::Game()
 {
 	previous_tick = SDL_GetPerformanceCounter();
+	Game::entity_manager = new EntityManager();
+	Game::asset_manager = new AssetManager();
+	Game::render_manager = new RenderManager();
+	Game::collision_manager = new CollisionManager();
 
 	if(!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
 	{
@@ -93,36 +99,36 @@ bool Game::is_running()
 
 void Game::load_level(unsigned int level_number)
 {
-	asset_manager.add_font(CHARRIOT_ID, CHARRIOT_TTF_PATH, 24);
-	asset_manager.add_texture(TANK_TEXTURE_ID, TANK_PNG_PATH);
-	asset_manager.add_texture(RADAR_TEXTURE_ID, RADAR_PNG_PATH);
-	asset_manager.add_texture(HELIPORT_TEXTURE_ID, HELIPORT_PNG_PATH);
-	asset_manager.add_texture(JUNGLE_MAP_TEXTURE_ID, JUNGLE_PNG_PATH);
-	asset_manager.add_texture(ENEMY_BULLET_TEXTURE_ID, BULLET_PNG_PATH);
+	this->asset_manager->add_font(CHARRIOT_ID, CHARRIOT_TTF_PATH, 24);
+	this->asset_manager->add_texture(TANK_TEXTURE_ID, TANK_PNG_PATH);
+	this->asset_manager->add_texture(RADAR_TEXTURE_ID, RADAR_PNG_PATH);
+	this->asset_manager->add_texture(HELIPORT_TEXTURE_ID, HELIPORT_PNG_PATH);
+	this->asset_manager->add_texture(JUNGLE_MAP_TEXTURE_ID, JUNGLE_PNG_PATH);
+	this->asset_manager->add_texture(ENEMY_BULLET_TEXTURE_ID, BULLET_PNG_PATH);
 
 	player = create_player(Vector2<float>(240, 160));
 
 	tile_map = new TileMap(JUNGLE_MAP_TEXTURE_ID, 2, 32);
 	tile_map->load_map(JUNGLE_MAP_PATH, 25, 20, "tile", 0);
 
-	Entity* level_name = entity_manager.add_entity("LabelLevelName", 9);
+	Entity* level_name = this->entity_manager->add_entity("LabelLevelName", 9);
 	level_name->add_component<TextComponent>(10, 10, "Level: 1", CHARRIOT_ID, WHITE);
 
-	Entity* tank = entity_manager.add_entity("tank", 1);
+	Entity* tank = this->entity_manager->add_entity("tank", 1);
 	tank->add_component<TransformComponent>(Vector2<float>(250, 495), Vector2<float>(1, 1), 0);
 	tank->add_component<StaticSpriteComponent>(TANK_TEXTURE_ID, Vector2<float>(32, 32), false);
 	tank->add_component<ColliderComponent>(ENEMY_COLLIDER_TAG, Vector2<int>(32, 32));
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
 	tank_transform->translate(Vector2<float>(10000, 0));
 
-	Entity* bullet = entity_manager.add_entity("bullet", 1);
+	Entity* bullet = this->entity_manager->add_entity("bullet", 1);
 	bullet->add_component<TransformComponent>(Vector2<float>(tank_transform->position.x+16, tank_transform->position.y+16), Vector2<float>(1, 1), 0);
 	bullet->add_component<StaticSpriteComponent>(ENEMY_BULLET_TEXTURE_ID, Vector2<float>(4, 4), false);
 	bullet->add_component<ColliderComponent>(ENEMY_BULLET_COLLIDER_TAG, Vector2<int>(4, 4));
 	TransformComponent* bullet_transform = bullet->get_component<TransformComponent>();
 	bullet_transform->translate(Vector2<float>(2000, 0));
 
-	Entity* heliport = entity_manager.add_entity("heliport", 1);
+	Entity* heliport = this->entity_manager->add_entity("heliport", 1);
 	heliport->add_component<TransformComponent>(Vector2<float>(470, 420), Vector2<float>(1, 1), 0);
 	heliport->add_component<StaticSpriteComponent>(HELIPORT_TEXTURE_ID, Vector2<float>(32, 32), false);
 	heliport->add_component<ColliderComponent>(HELIPORT_COLLIDER_TAG, Vector2<int>(32, 32));
@@ -132,7 +138,7 @@ void Game::load_level(unsigned int level_number)
 	Animation rotate_radar = Animation(0, 8, 150);
 	radar_animation.emplace(0, rotate_radar);
 
-	Entity* radar = entity_manager.add_entity("radar", 9);
+	Entity* radar = this->entity_manager->add_entity("radar", 9);
 	radar->add_component<TransformComponent>(Vector2<float>(720, 15), Vector2<float>(1, 1), 0);
 	radar->add_component<AnimatedSpriteComponent>(radar_animation, RADAR_TEXTURE_ID, 0, Vector2<int>(64, 64), true);
 }
@@ -157,7 +163,7 @@ void Game::update()
 
 	previous_tick = current_tick;
 
-	entity_manager.update(delta_time);
+	this->entity_manager->update(delta_time);
 
 	update_camera_movement();
 	check_collisions();
@@ -168,12 +174,12 @@ void Game::render()
 	SDL_SetRenderDrawColor(this->renderer, 21, 21, 21, 255);
 	SDL_RenderClear(this->renderer);
 
-	if(entity_manager.is_empty() == true)
+	if(this->entity_manager->is_empty() == true)
 	{
 		return;
 	}
 
-	render_manager.render();
+	this->render_manager->render();
 
 	SDL_RenderPresent(this->renderer);
 }
@@ -182,8 +188,8 @@ void Game::update_camera_movement()
 {
 	TransformComponent* player_transform = player->get_component<TransformComponent>();
 
-	camera.x = player_transform->position.x - static_cast<int>(WINDOW_WIDTH / 2);
-	camera.y = player_transform->position.y - static_cast<int>(WINDOW_HEIGHT / 2);
+	camera.x = static_cast<int>(player_transform->position.x) - static_cast<int>(WINDOW_WIDTH / 2);
+	camera.y = static_cast<int>(player_transform->position.y) - static_cast<int>(WINDOW_HEIGHT / 2);
 
 	camera.x = (camera.x < 0) ? 0 : camera.x;
 	camera.y = (camera.y < 0) ? 0 : camera.y;
@@ -203,7 +209,7 @@ void Game::check_collisions()
 	collisions.push_back(player_heliport_collision);
 	collisions.push_back(player_enemy_projectile_collision);
 
-	unsigned int collision_type = collision_manager.check_collisions(collisions, NO_COLLISION);
+	unsigned int collision_type = this->collision_manager->check_collisions(collisions, NO_COLLISION);
 
 	if(collision_type == PLAYER_ENEMY_COLLISION)
 	{
