@@ -54,4 +54,4 @@ run:
 	$(BINPATH)
 
 compile_commands:
-	bear -- make
+	bear -- make build_debug
