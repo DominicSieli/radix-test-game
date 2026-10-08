@@ -32,20 +32,16 @@ using namespace Radix;
 
 Entity* player;
 TileMap* tile_map;
-Uint64 current_tick;
-Uint64 previous_tick;
 float Game::delta_time;
 SDL_Event Game::input_event;
 SDL_Renderer* Game::renderer;
-const unsigned int render_layer_max = 10;
+const unsigned int render_layer_count = 10;
 SDL_Rect Game::camera = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 
 using namespace Radix;
 
 Game::Game()
 {
-	previous_tick = SDL_GetPerformanceCounter();
-
 	if(!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
 	{
 		std::cerr << "Error Initializing SDL\n";
@@ -150,14 +146,20 @@ void Game::input()
 
 void Game::update()
 {
-	current_tick = SDL_GetPerformanceCounter();
+	Uint64 frameStart = SDL_GetTicks();
+	Uint64 frameTime = SDL_GetTicks() - frameStart;
 
-	delta_time = static_cast<float>(current_tick - previous_tick) / static_cast<float>(SDL_GetPerformanceFrequency());
+	if(frameTime < FRAME_TARGET_TIME)
+	{
+		SDL_Delay(FRAME_TARGET_TIME - frameTime);
+	}
 
-	previous_tick = current_tick;
+	delta_time = (SDL_GetTicks() - previous_tick) / 1000.00f;
+	previous_tick = SDL_GetTicks();
+
+	delta_time = (delta_time > 0.05f) ? 0.05f : delta_time;
 
 	this->entity_manager.update(delta_time);
-
 	update_camera_movement();
 	check_collisions();
 }
@@ -172,7 +174,7 @@ void Game::render()
 		return;
 	}
 
-	this->render_manager.render(render_layer_max);
+	this->render_manager.render(render_layer_count);
 
 	SDL_RenderPresent(this->renderer);
 }
