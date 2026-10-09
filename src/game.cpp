@@ -98,7 +98,7 @@ void Game::load_level(const unsigned int& level_number)
 	player = create_player(Vector2<float>(240, 160));
 
 	tile_map = new TileMap(JUNGLE_MAP_TEXTURE_ID, 2, 32);
-	tile_map->load_map(JUNGLE_MAP_PATH, 25, 20, "tile", 0);
+	tile_map->load_map(JUNGLE_MAP_PATH, Vector2<int>(25, 20), "tile", 0);
 
 	Entity* level_name = this->entity_manager.add_entity("LabelLevelName", 9);
 	level_name->add_component<TextComponent>(Vector2<float>(10, 10), "Level: 1", CHARRIOT_ID, WHITE);
