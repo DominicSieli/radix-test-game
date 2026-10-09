@@ -86,7 +86,7 @@ bool Game::is_running()
 	return this->running;
 }
 
-void Game::load_level(unsigned int level_number)
+void Game::load_level(const unsigned int& level_number)
 {
 	this->asset_manager.add_font(CHARRIOT_ID, CHARRIOT_TTF_PATH, 24);
 	this->asset_manager.add_texture(TANK_TEXTURE_ID, TANK_PNG_PATH);
@@ -231,7 +231,7 @@ void Game::process_gameover()
 	running = false;
 }
 
-void Game::process_next_level(unsigned int level_number)
+void Game::process_next_level(const unsigned int& level_number)
 {
 	std::cout << "Next Level\n";
 	running = false;

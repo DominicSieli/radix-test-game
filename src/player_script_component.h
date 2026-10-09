@@ -20,7 +20,7 @@ class PlayerScriptComponent: public Component
 
 		void initialize() override;
 
-		void update(float) override;
+		void update(const float&) override;
 };
 
 #endif
