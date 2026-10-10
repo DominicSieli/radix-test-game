@@ -6,6 +6,6 @@
 
 using namespace Radix;
 
-Entity* create_player(Vector2<float>);
+Entity* create_player(const Vector2<float>&);
 
 #endif

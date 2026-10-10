@@ -95,7 +95,7 @@ void Game::load_level(const unsigned int& level_number)
 	this->asset_manager.add_texture(JUNGLE_MAP_TEXTURE_ID, JUNGLE_PNG_PATH);
 	this->asset_manager.add_texture(ENEMY_BULLET_TEXTURE_ID, BULLET_PNG_PATH);
 
-	player = create_player(Vector2<float>(240, 160));
+	player = create_player(Vector2<float>(240, 120));
 
 	tile_map = new TileMap(JUNGLE_MAP_TEXTURE_ID, 2, 32);
 	tile_map->load_map(JUNGLE_MAP_PATH, Vector2<int>(25, 20), "tile", 0);
@@ -208,19 +208,19 @@ void Game::check_collisions()
 
 	if(collision_type == PLAYER_ENEMY_COLLISION)
 	{
-		std::cout << "PLAYER_ENEMY_COLLISION" << std::endl;
+		std::cout << "PLAYER_ENEMY_COLLISION\n";
 		process_gameover();
 	}
 
 	if(collision_type == PLAYER_ENEMY_BULLET_COLLISION)
 	{
-		std::cout << "PLAYER_ENEMY_BULLET_COLLISION" << std::endl;
+		std::cout << "PLAYER_ENEMY_BULLET_COLLISION\n";
 		process_gameover();
 	}
 
 	if(collision_type == PLAYER_HELIPORT_COLLISION)
 	{
-		std::cout << "PLAYER_HELIPORT_COLLISION" << std::endl;
+		std::cout << "PLAYER_HELIPORT_COLLISION\n";
 		process_next_level(1);
 	}
 }

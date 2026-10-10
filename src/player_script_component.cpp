@@ -19,7 +19,7 @@ void PlayerScriptComponent::initialize()
 	this->transform_component = entity->get_component<TransformComponent>();
 }
 
-void PlayerScriptComponent::update(const float& delta_time)
+void PlayerScriptComponent::update(const float&)
 {
 	if(Game::input_event.type == SDL_EVENT_KEY_DOWN)
 	{
