@@ -52,31 +52,4 @@ void PlayerScriptComponent::update(const float&)
 		if(Game::input_event.key.key == SDLK_SPACE)
 		{}
 	}
-/*
-	if(Game::input_event.type == SDL_EVENT_KEY_UP)
-	{
-		if(Game::input_event.key.key == SDLK_UP)
-		{
-			this->transform_component->translate(Vector2<float>(0.00f, 0.00f));
-		}
-
-		if(Game::input_event.key.key == SDLK_DOWN)
-		{
-			this->transform_component->translate(Vector2<float>(0.00f, 0.00f));
-		}
-
-		if(Game::input_event.key.key == SDLK_LEFT)
-		{
-			this->transform_component->translate(Vector2<float>(0.00f, 0.00f));
-		}
-
-		if(Game::input_event.key.key == SDLK_RIGHT)
-		{
-			this->transform_component->translate(Vector2<float>(0.00f, 0.00f));
-		}
-
-		if(Game::input_event.key.key == SDLK_SPACE)
-		{}
-	}
-*/
 }
