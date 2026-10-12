@@ -111,7 +111,7 @@ void Game::load_level(const unsigned int& level_number)
 	tank_transform->translate(Vector2<float>(10000, 0));
 
 	Entity* bullet = this->entity_manager.add_entity("bullet", 1);
-	bullet->add_component<TransformComponent>(Vector2<float>(tank_transform->position.x+16, tank_transform->position.y+16), Vector2<float>(1, 1), 0);
+	bullet->add_component<TransformComponent>(Vector2<float>(tank_transform->get_position().x+16, tank_transform->get_position().y+16), Vector2<float>(1, 1), 0);
 	bullet->add_component<StaticSpriteComponent>(ENEMY_BULLET_TEXTURE_ID, Vector2<float>(4, 4), false);
 	bullet->add_component<ColliderComponent>(ENEMY_BULLET_COLLIDER_TAG, Vector2<int>(4, 4));
 	TransformComponent* bullet_transform = bullet->get_component<TransformComponent>();
@@ -172,8 +172,8 @@ void Game::update_camera_movement()
 {
 	TransformComponent* player_transform = player->get_component<TransformComponent>();
 
-	camera.x = static_cast<int>(player_transform->position.x) - static_cast<int>(WINDOW_WIDTH / 2);
-	camera.y = static_cast<int>(player_transform->position.y) - static_cast<int>(WINDOW_HEIGHT / 2);
+	camera.x = static_cast<int>(player_transform->get_position().x) - static_cast<int>(WINDOW_WIDTH / 2);
+	camera.y = static_cast<int>(player_transform->get_position().y) - static_cast<int>(WINDOW_HEIGHT / 2);
 
 	camera.x = (camera.x < 0) ? 0 : camera.x;
 	camera.y = (camera.y < 0) ? 0 : camera.y;
