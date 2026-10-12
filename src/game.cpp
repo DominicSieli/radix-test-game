@@ -18,6 +18,7 @@
 #include "../radix/src/component.h"
 #include "../radix/src/animation.h"
 #include "../radix/src/collision.h"
+#include "../radix/src/time_manager.h"
 #include "../radix/src/asset_manager.h"
 #include "../radix/src/text_component.h"
 #include "../radix/src/entity_manager.h"
@@ -32,7 +33,6 @@ using namespace Radix;
 
 Entity* player;
 TileMap* tile_map;
-float Game::delta_time;
 SDL_Event Game::input_event;
 SDL_Renderer* Game::renderer;
 const unsigned int render_layer_count = 10;
@@ -146,20 +146,9 @@ void Game::input()
 
 void Game::update()
 {
-	Uint64 frameStart = SDL_GetTicks();
-	Uint64 frameTime = SDL_GetTicks() - frameStart;
+	Game::time_manager.update_delta_time(FRAME_TARGET_TIME);
 
-	if(frameTime < FRAME_TARGET_TIME)
-	{
-		SDL_Delay(FRAME_TARGET_TIME - frameTime);
-	}
-
-	delta_time = (SDL_GetTicks() - previous_tick) / 1000.00f;
-	previous_tick = SDL_GetTicks();
-
-	delta_time = (delta_time > 0.05f) ? 0.05f : delta_time;
-
-	this->entity_manager.update(delta_time);
+	this->entity_manager.update(Game::time_manager.get_delta_time());
 	update_camera_movement();
 	check_collisions();
 }
