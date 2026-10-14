@@ -11,7 +11,7 @@
 
 Entity* create_player(const Vector2<float>& position)
 {
-	Entity* player = Game::entity_manager.add_entity("player", 2);
+	Entity* player = Game::entity_manager.create_entity("player", 2);
 
 	const char* const CHOPPER_PNG_PATH = "./assets/images/chopper-spritesheet.png";
 
