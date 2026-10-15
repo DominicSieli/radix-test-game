@@ -34,6 +34,7 @@ using namespace Radix;
 
 Entity* player;
 TileMap* tile_map;
+Entity* fps_display;
 SDL_Event Game::input_event;
 SDL_Renderer* Game::renderer;
 const unsigned int render_layer_count = 10;
@@ -102,7 +103,7 @@ void Game::load_level(const unsigned int& level_number)
 	tile_map->load_map(JUNGLE_MAP_PATH, Vector2<int>(25, 20), "tile", 0);
 
 	std::string fps_text = "FPS: " + std::to_string(time_manager.get_fps());
-	Entity* fps_display = this->entity_manager.create_entity("HUD", 9);
+	fps_display = this->entity_manager.create_entity("HUD", 9);
 	fps_display->add_component<TextComponent>(Vector2<float>(10, 10), fps_text, CHARRIOT_ID, WHITE);
 
 	Entity* tank = this->entity_manager.create_entity("tank", 1);
@@ -149,6 +150,9 @@ void Game::input()
 void Game::update()
 {
 	Game::time_manager.calculate_delta_time(FRAME_TARGET_TIME);
+	Game::time_manager.calculate_fps();
+
+	fps_display->get_component<TextComponent>()->set_text("FPS: " + std::to_string(Game::time_manager.get_fps()), CHARRIOT_ID);
 
 	this->entity_manager.update(Game::time_manager.get_delta_time());
 	update_camera_movement();
