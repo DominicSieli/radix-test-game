@@ -3,11 +3,10 @@
 #include <iostream>
 #include <SDL3/SDL.h>
 
-#include "settings.h"
-
 #include "player.h"
 #include "colors.h"
 #include "font_id.h"
+#include "settings.h"
 #include "texture_id.h"
 #include "asset_paths.h"
 #include "collision_tags.h"
@@ -38,7 +37,7 @@ Entity* fps_display;
 SDL_Event Game::input_event;
 SDL_Renderer* Game::renderer;
 const unsigned int render_layer_count = 10;
-SDL_Rect Game::camera = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
+SDL_Rect Game::camera = {0, 0, RESOLUTION_X, RESOLUTION_Y};
 
 using namespace Radix;
 
@@ -56,7 +55,7 @@ Game::Game()
 		return;
 	}
 
-	this->window = SDL_CreateWindow(nullptr, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_BORDERLESS);
+	this->window = SDL_CreateWindow(nullptr, RESOLUTION_X, RESOLUTION_Y, SDL_WINDOW_BORDERLESS);
 
 	if(this->window == nullptr)
 	{
@@ -107,21 +106,21 @@ void Game::load_level(const unsigned int& level_number)
 	fps_display->add_component<TextComponent>(Vector2<float>(10, 10), fps_text, CHARRIOT_ID, WHITE);
 
 	Entity* tank = this->entity_manager.create_entity("tank", 1);
-	tank->add_component<TransformComponent>(Vector2<float>(250, 495), Vector2<float>(1, 1), 0);
+	tank->add_component<TransformComponent>(Vector2<float>(250, 495), Vector2<float>(1, 1), 0, Vector2<unsigned int>(32, 32));
 	tank->add_component<StaticSpriteComponent>(TANK_TEXTURE_ID, Vector2<float>(32, 32), false);
 	tank->add_component<ColliderComponent>(ENEMY_COLLIDER_TAG, Vector2<int>(32, 32));
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
 	tank_transform->translate(Vector2<float>(10000, 0));
 
 	Entity* bullet = this->entity_manager.create_entity("bullet", 1);
-	bullet->add_component<TransformComponent>(Vector2<float>(tank_transform->get_position().x+16, tank_transform->get_position().y+16), Vector2<float>(1, 1), 0);
+	bullet->add_component<TransformComponent>(Vector2<float>(tank_transform->get_position().x+16, tank_transform->get_position().y+16), Vector2<float>(1, 1), 0, Vector2<unsigned int>(4, 4));
 	bullet->add_component<StaticSpriteComponent>(ENEMY_BULLET_TEXTURE_ID, Vector2<float>(4, 4), false);
 	bullet->add_component<ColliderComponent>(ENEMY_BULLET_COLLIDER_TAG, Vector2<int>(4, 4));
 	TransformComponent* bullet_transform = bullet->get_component<TransformComponent>();
 	bullet_transform->translate(Vector2<float>(2000, 0));
 
 	Entity* heliport = this->entity_manager.create_entity("heliport", 1);
-	heliport->add_component<TransformComponent>(Vector2<float>(470, 420), Vector2<float>(1, 1), 0);
+	heliport->add_component<TransformComponent>(Vector2<float>(470, 420), Vector2<float>(1, 1), 0, Vector2<unsigned int>(32, 32));
 	heliport->add_component<StaticSpriteComponent>(HELIPORT_TEXTURE_ID, Vector2<float>(32, 32), false);
 	heliport->add_component<ColliderComponent>(HELIPORT_COLLIDER_TAG, Vector2<int>(32, 32));
 
@@ -131,7 +130,7 @@ void Game::load_level(const unsigned int& level_number)
 	radar_animation.emplace(0, rotate_radar);
 
 	Entity* radar = this->entity_manager.create_entity("radar", 9);
-	radar->add_component<TransformComponent>(Vector2<float>(720, 15), Vector2<float>(1, 1), 0);
+	radar->add_component<TransformComponent>(Vector2<float>(720, 15), Vector2<float>(1, 1), 0, Vector2<unsigned int>(64, 64));
 	radar->add_component<AnimatedSpriteComponent>(radar_animation, RADAR_TEXTURE_ID, 0, Vector2<int>(64, 64), true);
 }
 
@@ -149,7 +148,7 @@ void Game::input()
 
 void Game::update()
 {
-	Game::time_manager.calculate_delta_time(FRAME_TARGET_TIME);
+	Game::time_manager.calculate_delta_time(TARGET_FRAME_TIME);
 	Game::time_manager.calculate_fps();
 
 	fps_display->get_component<TextComponent>()->set_text("FPS: " + std::to_string(Game::time_manager.get_fps()), CHARRIOT_ID);
@@ -178,8 +177,8 @@ void Game::update_camera_movement()
 {
 	TransformComponent* player_transform = player->get_component<TransformComponent>();
 
-	camera.x = static_cast<int>(player_transform->get_position().x) - static_cast<int>(WINDOW_WIDTH / 2);
-	camera.y = static_cast<int>(player_transform->get_position().y) - static_cast<int>(WINDOW_HEIGHT / 2);
+	camera.x = static_cast<int>(player_transform->get_position().x) - static_cast<int>(RESOLUTION_X / 2);
+	camera.y = static_cast<int>(player_transform->get_position().y) - static_cast<int>(RESOLUTION_Y / 2);
 
 	camera.x = (camera.x < 0) ? 0 : camera.x;
 	camera.y = (camera.y < 0) ? 0 : camera.y;

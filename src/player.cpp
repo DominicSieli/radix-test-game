@@ -29,7 +29,7 @@ Entity* create_player(const Vector2<float>& position)
 	chopper_animations.try_emplace(PLAYER_LEFT, left);
 	chopper_animations.try_emplace(PLAYER_RIGHT, right);
 
-	player->add_component<TransformComponent>(Vector2<float>(position.x, position.y), Vector2<float>(1, 1), 0.00f);
+	player->add_component<TransformComponent>(Vector2<float>(position.x, position.y), Vector2<float>(1, 1), 0.00f, Vector2<unsigned int>(32, 32));
 	player->add_component<AnimatedSpriteComponent>(chopper_animations, CHOPPER_TEXTURE_ID, PLAYER_DOWN, Vector2<int>(32, 32), false);
 	player->add_component<PlayerScriptComponent>();
 	player->add_component<ColliderComponent>(PLAYER_COLLIDER_TAG, Vector2<int>(32, 32));

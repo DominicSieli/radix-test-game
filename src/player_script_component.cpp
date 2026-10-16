@@ -5,6 +5,7 @@
 
 #include "../radix/src/game.h"
 #include "../radix/src/vector_2.h"
+#include "../radix/src/constraints.h"
 
 PlayerScriptComponent::PlayerScriptComponent()
 {}
@@ -15,41 +16,43 @@ PlayerScriptComponent::~PlayerScriptComponent()
 
 void PlayerScriptComponent::initialize()
 {
-	this->animated_sprite_component = get_entity()->get_component<AnimatedSpriteComponent>();
-	this->transform_component = get_entity()->get_component<TransformComponent>();
+	animated_sprite_component = get_entity()->get_component<AnimatedSpriteComponent>();
+	transform_component = get_entity()->get_component<TransformComponent>();
 }
 
 void PlayerScriptComponent::update(const float&)
 {
 	if(Game::input_event.type == SDL_EVENT_KEY_DOWN)
 	{
-		float speed = 100.00f;
+		float speed = 200.00f;
 
 		if(Game::input_event.key.key == SDLK_UP)
 		{
-			this->transform_component->translate(Vector2<float>(0.00f, -speed));
-			this->animated_sprite_component->play(PLAYER_UP);
+			transform_component->translate(Vector2<float>(0.00f, -speed));
+			animated_sprite_component->play(PLAYER_UP);
 		}
 
 		if(Game::input_event.key.key == SDLK_DOWN)
 		{
-			this->transform_component->translate(Vector2<float>(0.00f, speed));
+			transform_component->translate(Vector2<float>(0.00f, speed));
 			animated_sprite_component->play(PLAYER_DOWN);
 		}
 
 		if(Game::input_event.key.key == SDLK_LEFT)
 		{
-			this->transform_component->translate(Vector2<float>(-speed, 0.00f));
+			transform_component->translate(Vector2<float>(-speed, 0.00f));
 			animated_sprite_component->play(PLAYER_LEFT);
 		}
 
 		if(Game::input_event.key.key == SDLK_RIGHT)
 		{
-			this->transform_component->translate(Vector2<float>(speed, 0.00f));
+			transform_component->translate(Vector2<float>(speed, 0.00f));
 			animated_sprite_component->play(PLAYER_RIGHT);
 		}
 
 		if(Game::input_event.key.key == SDLK_SPACE)
 		{}
 	}
+
+	constrain_to_camera_bounds(get_entity());
 }

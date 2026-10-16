@@ -2,8 +2,8 @@
 #define SETTINGS_H
 
 const unsigned int TARGET_FPS = 60;
-const unsigned int WINDOW_WIDTH = 800;
-const unsigned int WINDOW_HEIGHT = 600;
-const unsigned int FRAME_TARGET_TIME = 1000 / TARGET_FPS;
+const unsigned int RESOLUTION_X = 800;
+const unsigned int RESOLUTION_Y = 600;
+const unsigned int TARGET_FRAME_TIME = 1000 / TARGET_FPS;
 
 #endif
