@@ -15,8 +15,8 @@ PlayerScriptComponent::~PlayerScriptComponent()
 
 void PlayerScriptComponent::initialize()
 {
-	this->animated_sprite_component = entity->get_component<AnimatedSpriteComponent>();
-	this->transform_component = entity->get_component<TransformComponent>();
+	this->animated_sprite_component = get_entity()->get_component<AnimatedSpriteComponent>();
+	this->transform_component = get_entity()->get_component<TransformComponent>();
 }
 
 void PlayerScriptComponent::update(const float&)
