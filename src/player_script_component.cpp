@@ -24,7 +24,7 @@ void PlayerScriptComponent::update(const float&)
 {
 	if(Game::input_event.type == SDL_EVENT_KEY_DOWN)
 	{
-		float speed = 200.00f;
+		float speed = 400.00f;
 
 		if(Game::input_event.key.key == SDLK_UP)
 		{
