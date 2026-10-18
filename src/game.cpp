@@ -98,8 +98,8 @@ void Game::load_level(const unsigned int& level_number)
 
 	player = create_player(Vector2<float>(240, 110));
 
-	tile_map = new TileMap(JUNGLE_MAP_TEXTURE_ID, 2, 32);
-	tile_map->load_map(JUNGLE_MAP_PATH, Vector2<int>(25, 20), "tile", 0);
+	tile_map = new TileMap(JUNGLE_MAP_TEXTURE_ID, Vector2<int>(25, 20), 32, 2);
+	tile_map->load_map(JUNGLE_MAP_PATH, "tile", 0);
 
 	std::string fps_text = "FPS: " + std::to_string(time_manager.get_fps());
 	fps_display = this->entity_manager.create_entity("HUD", 9);
@@ -175,6 +175,8 @@ void Game::render()
 
 void Game::update_camera_movement()
 {
+	int tile_map_x = tile_map->get_map_dimensions().x;
+	int tile_map_y = tile_map->get_map_dimensions().y;
 	TransformComponent* player_transform = player->get_component<TransformComponent>();
 
 	camera.x = static_cast<int>(player_transform->get_position().x) - static_cast<int>(RESOLUTION_X / 2);
@@ -182,8 +184,8 @@ void Game::update_camera_movement()
 
 	camera.x = (camera.x < 0) ? 0 : camera.x;
 	camera.y = (camera.y < 0) ? 0 : camera.y;
-	camera.x = (camera.x > camera.w) ? camera.w : camera.x;
-	camera.y = (camera.y > camera.h) ? camera.h : camera.y;
+	camera.x = (camera.x + camera.w > tile_map_x) ? tile_map_x - camera.w : camera.x;
+	camera.y = (camera.y + camera.h > tile_map_y) ? tile_map_y - camera.h : camera.y;
 }
 
 void Game::check_collisions()
