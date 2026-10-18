@@ -2,7 +2,7 @@
 #define ENTITY_FACTORY_H
 
 #include "../radix/src/entity.h"
-#include "../radix/src/vector_2.h"
+#include "../radix/src/vectors.h"
 
 using namespace Radix;
 

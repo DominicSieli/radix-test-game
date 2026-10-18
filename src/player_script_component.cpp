@@ -4,12 +4,11 @@
 #include "player_script_component.h"
 
 #include "../radix/src/game.h"
-#include "../radix/src/vector_2.h"
+#include "../radix/src/vectors.h"
 #include "../radix/src/constraints.h"
 
 PlayerScriptComponent::PlayerScriptComponent()
 {}
-
 
 PlayerScriptComponent::~PlayerScriptComponent()
 {}
