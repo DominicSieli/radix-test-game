@@ -3,7 +3,7 @@
 
 const unsigned int TARGET_FPS = 60;
 const unsigned int RESOLUTION_X = 1280;
-const unsigned int RESOLUTION_Y = 720;
-const unsigned int TARGET_FRAME_TIME = 1000 / TARGET_FPS;
+const unsigned int RESOLUTION_Y = 800;
+const float TARGET_FRAME_TIME = 1000.00f / static_cast<float>(TARGET_FPS);
 
 #endif
