@@ -19,6 +19,7 @@
 #include "../radix/src/animation.h"
 #include "../radix/src/collision.h"
 #include "../radix/src/time_manager.h"
+#include "../radix/src/audio_manager.h"
 #include "../radix/src/asset_manager.h"
 #include "../radix/src/text_component.h"
 #include "../radix/src/entity_manager.h"
@@ -73,11 +74,23 @@ Game::Game()
 		return;
 	}
 
-	SDL_Log("rendering api: %s", SDL_GetRendererName(renderer));
+	SDL_Log("graphics api: %s", SDL_GetRendererName(renderer));
 
 	load_level(0);
 
 	this->running = true;
+
+	if(!audio_manager.init())
+	{
+		SDL_Log("Audio initialization failed.");
+	}
+
+	audio_manager.load_audio("./assets/sounds/helicopter.wav");
+
+	audio_manager.set_sound_volume(1.00f);
+
+	audio_manager.play_music("./assets/sounds/helicopter.wav", -1);
+
 	return;
 }
 
