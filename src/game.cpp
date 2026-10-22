@@ -85,11 +85,11 @@ Game::Game()
 		SDL_Log("Audio initialization failed.");
 	}
 
-	audio_manager.load_audio("./assets/sounds/helicopter.wav");
+	audio_manager.load_audio("./assets/music/track-1.wav");
 
-	audio_manager.set_sound_volume(1.00f);
+	audio_manager.set_music_volume(0.10f);
 
-	audio_manager.play_music("./assets/sounds/helicopter.wav", -1);
+	audio_manager.play_music("./assets/music/track-1.wav", -1);
 
 	return;
 }
