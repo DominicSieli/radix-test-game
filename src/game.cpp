@@ -85,12 +85,6 @@ Game::Game()
 		SDL_Log("Audio initialization failed.");
 	}
 
-	audio_manager.load_audio("./assets/music/track-1.wav");
-
-	audio_manager.set_music_volume(0.10f);
-
-	audio_manager.play_music("./assets/music/track-1.wav", -1);
-
 	return;
 }
 
@@ -139,7 +133,7 @@ void Game::load_level(const unsigned int& level_number)
 	heliport->add_component<StaticSpriteComponent>(false, SDL_FLIP_NONE, HELIPORT_TEXTURE_ID, Vector2<float>(32, 32));
 	heliport->add_component<ColliderComponent>(HELIPORT_COLLIDER_TAG, Vector2<float>(32, 32));
 
-	std::map<unsigned int, Animation> radar_animation;
+	std::unordered_map<unsigned int, Animation> radar_animation;
 
 	Animation rotate_radar = Animation(0, 8, 150);
 	radar_animation.emplace(0, rotate_radar);

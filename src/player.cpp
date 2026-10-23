@@ -19,7 +19,7 @@ Entity* create_player(const Vector2<float>& position)
 
 	Game::asset_manager.add_texture(CHOPPER_TEXTURE_ID, CHOPPER_PNG_PATH);
 
-	std::map<unsigned int, Animation> chopper_animations;
+	std::unordered_map<unsigned int, Animation> chopper_animations;
 
 	Animation up = Animation(3, 2, 9);
 	Animation down = Animation(0, 2, 9);
