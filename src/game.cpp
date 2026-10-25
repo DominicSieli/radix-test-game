@@ -36,7 +36,6 @@ Entity* player;
 TileMap* tile_map;
 Entity* fps_display;
 const unsigned int render_layer_count = 10;
-SDL_FRect Game::camera = {0, 0, RESOLUTION_X, RESOLUTION_Y};
 
 using namespace Radix;
 
@@ -63,6 +62,8 @@ Game::Game()
 	}
 
 	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+
+	camera_manager.initialize(0, 0, RESOLUTION_X, RESOLUTION_Y);
 
 	if(!render_manager.initialize(window, nullptr))
 	{
@@ -172,17 +173,11 @@ void Game::render()
 
 void Game::update_camera_movement()
 {
-	int tile_map_x = tile_map->get_map_dimensions().x;
-	int tile_map_y = tile_map->get_map_dimensions().y;
+	float tile_map_x = static_cast<float>(tile_map->get_map_dimensions().x);
+	float tile_map_y = static_cast<float>(tile_map->get_map_dimensions().y);
 	TransformComponent* player_transform = player->get_component<TransformComponent>();
 
-	camera.x = player_transform->get_position().x - camera.w / 2;
-	camera.y = player_transform->get_position().y - camera.h / 2;
-
-	camera.x = (camera.x < 0) ? 0 : camera.x;
-	camera.y = (camera.y < 0) ? 0 : camera.y;
-	camera.x = (camera.x + camera.w > static_cast<float>(tile_map_x)) ? static_cast<float>(tile_map_x) - camera.w : camera.x;
-	camera.y = (camera.y + camera.h > static_cast<float>(tile_map_y)) ? static_cast<float>(tile_map_y) - camera.h : camera.y;
+	camera_manager.update_position(player_transform->get_position(), Vector2<float>(tile_map_x, tile_map_y));
 }
 
 void Game::check_collisions()
