@@ -21,35 +21,35 @@ void PlayerScriptComponent::initialize()
 
 void PlayerScriptComponent::update(const float&)
 {
-	if(Game::input_event.type == SDL_EVENT_KEY_DOWN)
+	if(Game::input_manager.get_event().type == SDL_EVENT_KEY_DOWN)
 	{
 		float speed = 400.00f;
 
-		if(Game::input_event.key.key == SDLK_UP)
+		if(Game::input_manager.get_event().key.key == SDLK_UP)
 		{
 			transform_component->translate(Vector2<float>(0.00f, -speed));
 			animated_sprite_component->play(PLAYER_UP);
 		}
 
-		if(Game::input_event.key.key == SDLK_DOWN)
+		if(Game::input_manager.get_event().key.key == SDLK_DOWN)
 		{
 			transform_component->translate(Vector2<float>(0.00f, speed));
 			animated_sprite_component->play(PLAYER_DOWN);
 		}
 
-		if(Game::input_event.key.key == SDLK_LEFT)
+		if(Game::input_manager.get_event().key.key == SDLK_LEFT)
 		{
 			transform_component->translate(Vector2<float>(-speed, 0.00f));
 			animated_sprite_component->play(PLAYER_LEFT);
 		}
 
-		if(Game::input_event.key.key == SDLK_RIGHT)
+		if(Game::input_manager.get_event().key.key == SDLK_RIGHT)
 		{
 			transform_component->translate(Vector2<float>(speed, 0.00f));
 			animated_sprite_component->play(PLAYER_RIGHT);
 		}
 
-		if(Game::input_event.key.key == SDLK_SPACE)
+		if(Game::input_manager.get_event().key.key == SDLK_SPACE)
 		{}
 	}
 

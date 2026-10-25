@@ -35,7 +35,6 @@ using namespace Radix;
 Entity* player;
 TileMap* tile_map;
 Entity* fps_display;
-SDL_Event Game::input_event;
 const unsigned int render_layer_count = 10;
 SDL_FRect Game::camera = {0, 0, RESOLUTION_X, RESOLUTION_Y};
 
@@ -144,12 +143,12 @@ void Game::load_level(const unsigned int& level_number)
 
 void Game::input()
 {
-	SDL_PollEvent(&input_event);
+	input_manager.poll();
 
-	switch(input_event.type)
+	switch(input_manager.get_event().type)
 	{
 		case SDL_EVENT_QUIT: { running = false; break; }
-		case SDL_EVENT_KEY_DOWN: { if(input_event.key.key == SDLK_ESCAPE) running = false; break; }
+		case SDL_EVENT_KEY_DOWN: { if(input_manager.get_event().key.key == SDLK_ESCAPE) running = false; break; }
 		default: break;
 	}
 }
@@ -168,17 +167,7 @@ void Game::update()
 
 void Game::render()
 {
-	SDL_SetRenderDrawColor(render_manager.get_renderer(), 21, 21, 21, 255);
-	SDL_RenderClear(render_manager.get_renderer());
-
-	if(entity_manager.is_empty() == true)
-	{
-		return;
-	}
-
 	render_manager.render(render_layer_count);
-
-	SDL_RenderPresent(render_manager.get_renderer());
 }
 
 void Game::update_camera_movement()
