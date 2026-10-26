@@ -21,6 +21,7 @@
 #include "../radix/src/time_manager.h"
 #include "../radix/src/audio_manager.h"
 #include "../radix/src/asset_manager.h"
+#include "../radix/src/window_manager.h"
 #include "../radix/src/text_component.h"
 #include "../radix/src/entity_manager.h"
 #include "../radix/src/render_manager.h"
@@ -53,21 +54,18 @@ Game::Game()
 		return;
 	}
 
-	window = SDL_CreateWindow(nullptr, RESOLUTION_X, RESOLUTION_Y, SDL_WINDOW_BORDERLESS);
-
-	if(window == nullptr)
+	if(!window_manager.initialize(RESOLUTION_X, RESOLUTION_Y))
 	{
-		std::cerr << "Error Creating SDL window\n";
-		return;
+		SDL_Log("Window initialization failed.");
+		destroy();
 	}
-
-	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
 	camera_manager.initialize(0, 0, RESOLUTION_X, RESOLUTION_Y);
 
-	if(!render_manager.initialize(window, nullptr))
+	if(!render_manager.initialize(window_manager.get_window(), nullptr))
 	{
 		SDL_Log("Renderer initialization failed.");
+		destroy();
 	}
 
 	SDL_Log("graphics api: %s", SDL_GetRendererName(render_manager.get_renderer()));
@@ -79,6 +77,7 @@ Game::Game()
 	if(!audio_manager.initialize())
 	{
 		SDL_Log("Audio initialization failed.");
+		destroy();
 	}
 
 	audio_manager.load_audio("./assets/music/gametrack-4.wav", 1);
@@ -227,6 +226,6 @@ void Game::process_next_level(const unsigned int& level_number)
 
 void Game::destroy()
 {
-	SDL_DestroyWindow(window);
+	SDL_DestroyWindow(window_manager.get_window());
 	SDL_Quit();
 }

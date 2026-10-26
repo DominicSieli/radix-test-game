@@ -50,7 +50,16 @@ void PlayerScriptComponent::update(const float&)
 		}
 
 		if(Game::input_manager.get_event().key.key == SDLK_SPACE)
-		{}
+		{
+			if(Game::time_manager.is_paused())
+			{
+				Game::time_manager.unpause();
+			}
+			else
+			{
+				Game::time_manager.pause();
+			}
+		}
 	}
 
 	constrain_to_camera_bounds(get_entity());
