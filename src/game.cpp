@@ -72,8 +72,6 @@ Game::Game()
 
 	load_level(0);
 
-	running = true;
-
 	if(!audio_manager.initialize())
 	{
 		SDL_Log("Audio initialization failed.");
@@ -88,11 +86,6 @@ Game::Game()
 
 Game::~Game()
 {}
-
-bool Game::is_running()
-{
-	return running;
-}
 
 void Game::load_level(const unsigned int& level_number)
 {
@@ -147,8 +140,8 @@ void Game::input()
 
 	switch(input_manager.get_event().type)
 	{
-		case SDL_EVENT_QUIT: { running = false; break; }
-		case SDL_EVENT_KEY_DOWN: { if(input_manager.get_event().key.key == SDLK_ESCAPE) running = false; break; }
+		case SDL_EVENT_QUIT: { state_manager.exit_game(); break; }
+		case SDL_EVENT_KEY_DOWN: { if(input_manager.get_event().key.key == SDLK_ESCAPE) state_manager.exit_game(); break; }
 		default: break;
 	}
 }
@@ -215,13 +208,13 @@ void Game::check_collisions()
 void Game::process_gameover()
 {
 	std::cout << "Game Over\n";
-	running = false;
+	state_manager.exit_game();
 }
 
 void Game::process_next_level(const unsigned int& level_number)
 {
 	std::cout << "Next Level\n";
-	running = false;
+	state_manager.exit_game();
 }
 
 void Game::destroy()

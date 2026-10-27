@@ -4,7 +4,7 @@ int main(int argc, char* args[])
 {
 	Radix::Game game;
 
-	while(game.is_running())
+	while(game.state_manager.is_running())
 	{
 		game.input();
 		game.update();
