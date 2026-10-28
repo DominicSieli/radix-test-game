@@ -21,18 +21,6 @@ void PlayerScriptComponent::initialize()
 
 void PlayerScriptComponent::update(const float&)
 {
-	if(Game::state_manager.is_paused())
-	{
-		transform_component->pause();
-		animated_sprite_component->pause();
-	}
-
-	if(!Game::state_manager.is_paused())
-	{
-		transform_component->unpause();
-		animated_sprite_component->unpause();
-	}
-
 	if(Game::input_manager.get_event().type == SDL_EVENT_KEY_DOWN)
 	{
 		float speed = 400.00f;
@@ -65,16 +53,7 @@ void PlayerScriptComponent::update(const float&)
 		}
 
 		if(Game::input_manager.get_event().key.key == SDLK_SPACE)
-		{
-			if(Game::state_manager.is_paused())
-			{
-				Game::state_manager.unpause();
-			}
-			else if(!Game::state_manager.is_paused())
-			{
-				Game::state_manager.pause();
-			}
-		}
+		{}
 	}
 
 	constrain_to_camera_bounds(get_entity());

@@ -156,6 +156,34 @@ void Game::update()
 	entity_manager.update(Game::time_manager.get_delta_time());
 	update_camera_movement();
 	check_collisions();
+
+	if(Game::input_manager.get_event().type == SDL_EVENT_KEY_DOWN)
+	{
+		if(Game::input_manager.get_event().key.key == SDLK_SPACE)
+		{
+			if(Game::state_manager.is_paused())
+			{
+				Game::state_manager.unpause();
+			}
+			else if(!Game::state_manager.is_paused())
+			{
+				Game::state_manager.pause();
+			}
+		}
+	}
+
+	if(Game::state_manager.is_paused())
+	{
+		player->get_component<TransformComponent>()->set_inactive();
+		player->get_component<AnimatedSpriteComponent>()->pause();
+	}
+
+	if(!Game::state_manager.is_paused())
+	{
+
+		player->get_component<TransformComponent>()->set_active();
+		player->get_component<AnimatedSpriteComponent>()->unpause();
+	}
 }
 
 void Game::render()
