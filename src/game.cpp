@@ -42,18 +42,6 @@ using namespace Radix;
 
 Game::Game()
 {
-	if(!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
-	{
-		std::cerr << "Error Initializing SDL\n";
-		return;
-	}
-
-	if(!TTF_Init())
-	{
-		std::cerr << "Error Initializing SDL TTF\n";
-		return;
-	}
-
 	if(!window_manager.initialize(RESOLUTION_X, RESOLUTION_Y))
 	{
 		SDL_Log("Window initialization failed.");
@@ -175,14 +163,14 @@ void Game::update()
 	if(Game::state_manager.is_paused())
 	{
 		player->get_component<TransformComponent>()->set_inactive();
-		player->get_component<AnimatedSpriteComponent>()->pause();
+		player->get_component<AnimatedSpriteComponent>()->set_inactive();
 	}
 
 	if(!Game::state_manager.is_paused())
 	{
 
 		player->get_component<TransformComponent>()->set_active();
-		player->get_component<AnimatedSpriteComponent>()->unpause();
+		player->get_component<AnimatedSpriteComponent>()->set_active();
 	}
 }
 
