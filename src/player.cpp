@@ -21,10 +21,10 @@ Entity* create_player(const Vector2<float>& position)
 
 	std::unordered_map<unsigned int, Animation> chopper_animations;
 
-	Animation up = Animation(3, 2, 9);
-	Animation down = Animation(0, 2, 9);
-	Animation left = Animation(2, 2, 9);
-	Animation right = Animation(1, 2, 9);
+	Animation up = Animation(3, 2, 10);
+	Animation down = Animation(0, 2, 10);
+	Animation left = Animation(2, 2, 10);
+	Animation right = Animation(1, 2, 10);
 
 	chopper_animations.try_emplace(PLAYER_UP, up);
 	chopper_animations.try_emplace(PLAYER_DOWN, down);
@@ -32,7 +32,7 @@ Entity* create_player(const Vector2<float>& position)
 	chopper_animations.try_emplace(PLAYER_RIGHT, right);
 
 	player->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(position.x, position.y), Vector2<float>(1, 1), 0);
-	player->add_component<AnimatedSpriteComponent>(false, SDL_FLIP_NONE, CHOPPER_TEXTURE_ID, Vector2<float>(32, 32), PLAYER_DOWN, chopper_animations);
+	player->add_component<AnimatedSpriteComponent>(false, SDL_FLIP_NONE, CHOPPER_TEXTURE_ID, PLAYER_DOWN, chopper_animations);
 	player->add_component<PlayerScriptComponent>();
 	player->add_component<ColliderComponent>(PLAYER_COLLIDER_TAG, Vector2<float>(32, 32));
 
