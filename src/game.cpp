@@ -50,7 +50,7 @@ Game::Game()
 
 	camera_manager.initialize(0, 0, RESOLUTION_X, RESOLUTION_Y);
 
-	if(!render_manager.initialize(window_manager.get_window(), nullptr))
+	if(!render_manager.initialize(window_manager.get_window(), nullptr, 0))
 	{
 		SDL_Log("Renderer initialization failed.");
 		destroy();
@@ -136,8 +136,9 @@ void Game::input()
 
 void Game::update()
 {
-	Game::time_manager.calculate_delta_time(TARGET_FRAME_TIME);
+	Game::time_manager.cap_fps(TARGET_FPS);
 	Game::time_manager.calculate_fps();
+	Game::time_manager.calculate_delta_time();
 
 	fps_display->get_component<TextComponent>()->set_text("FPS: " + std::to_string(Game::time_manager.get_fps()), CHARRIOT_ID);
 
