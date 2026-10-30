@@ -10,6 +10,7 @@
 #include "texture_id.h"
 #include "asset_paths.h"
 #include "collision_tags.h"
+#include "entity_type_id.h"
 
 #include "../radix/src/game.h"
 #include "../radix/src/entity.h"
@@ -87,27 +88,27 @@ void Game::load_level(const unsigned int& level_number)
 	player = create_player(Vector2<float>(240, 110));
 
 	tile_map = new TileMap(JUNGLE_MAP_TEXTURE_ID, Vector2<int>(25, 20), 32, 2);
-	tile_map->load_map(JUNGLE_MAP_PATH, "tile", 0);
+	tile_map->load_map(JUNGLE_MAP_PATH, TILE_ID, 0);
 
 	std::string fps_text = "FPS: " + std::to_string(time_manager.get_fps());
-	fps_display = entity_manager.create_entity("HUD", 9);
+	fps_display = entity_manager.create_entity(HUD_ID, 9);
 	fps_display->add_component<TextComponent>(Vector2<float>(10, 10), fps_text, CHARRIOT_ID, WHITE);
 
-	Entity* tank = entity_manager.create_entity("tank", 1);
+	Entity* tank = entity_manager.create_entity(TANK_ID, 1);
 	tank->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(250, 495), Vector2<float>(1, 1), 0);
 	tank->add_component<StaticSpriteComponent>(false, SDL_FLIP_NONE, TANK_TEXTURE_ID);
 	tank->add_component<ColliderComponent>(ENEMY_COLLIDER_TAG, Vector2<float>(32, 32));
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
 	tank_transform->translate(Vector2<float>(10000, 0));
 
-	Entity* bullet = entity_manager.create_entity("bullet", 1);
+	Entity* bullet = entity_manager.create_entity(ENEMY_BULLET_ID, 1);
 	bullet->add_component<TransformComponent>(Vector2<float>(4, 4), Vector2<float>(tank_transform->get_position().x+16, tank_transform->get_position().y+16), Vector2<float>(1, 1), 0);
 	bullet->add_component<StaticSpriteComponent>(false, SDL_FLIP_NONE, ENEMY_BULLET_TEXTURE_ID);
 	bullet->add_component<ColliderComponent>(ENEMY_BULLET_COLLIDER_TAG, Vector2<float>(4, 4));
 	TransformComponent* bullet_transform = bullet->get_component<TransformComponent>();
 	bullet_transform->translate(Vector2<float>(2000, 0));
 
-	Entity* heliport = entity_manager.create_entity("heliport", 1);
+	Entity* heliport = entity_manager.create_entity(HELIPORT_ID, 1);
 	heliport->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(470, 420), Vector2<float>(1, 1), 0);
 	heliport->add_component<StaticSpriteComponent>(false, SDL_FLIP_NONE, HELIPORT_TEXTURE_ID);
 	heliport->add_component<ColliderComponent>(HELIPORT_COLLIDER_TAG, Vector2<float>(32, 32));
@@ -117,7 +118,7 @@ void Game::load_level(const unsigned int& level_number)
 	Animation rotate_radar = Animation(0, 8, 150);
 	radar_animation.emplace(0, rotate_radar);
 
-	Entity* radar = entity_manager.create_entity("radar", 9);
+	Entity* radar = entity_manager.create_entity(RADAR_ID, 9);
 	radar->add_component<TransformComponent>(Vector2<float>(64, 64), Vector2<float>(720, 15), Vector2<float>(1, 1), 0);
 	radar->add_component<AnimatedSpriteComponent>(true, SDL_FLIP_NONE, RADAR_TEXTURE_ID, 0, radar_animation);
 }

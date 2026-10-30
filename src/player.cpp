@@ -3,6 +3,7 @@
 #include "player.h"
 #include "texture_id.h"
 #include "collision_tags.h"
+#include "entity_type_id.h"
 #include "player_animations.h"
 #include "player_script_component.h"
 
@@ -13,7 +14,7 @@
 
 Entity* create_player(const Vector2<float>& position)
 {
-	Entity* player = Game::entity_manager.create_entity("player", 2);
+	Entity* player = Game::entity_manager.create_entity(PLAYER_ID, 2);
 
 	const char* const CHOPPER_PNG_PATH = "./assets/images/chopper-spritesheet.png";
 
