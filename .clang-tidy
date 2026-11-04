@@ -1,0 +1,7 @@
+Checks: >
+  bugprone-*,
+  performance-*,
+  clang-analyzer-*,
+  cppcoreguidelines-*
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*'

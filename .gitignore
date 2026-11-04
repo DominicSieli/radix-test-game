@@ -1,0 +1,17 @@
+# Ignore Everything
+*
+
+# Except
+!src/
+!src/*.h
+!src/*.cpp
+!radix/
+!radix/**
+!.clangd
+!assets/
+!assets/**
+!LICENSE
+!Makefile
+!README.md
+!.gitignore
+!.clang-tidy
