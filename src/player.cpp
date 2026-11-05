@@ -11,6 +11,7 @@
 #include "../radix/src/animation.h"
 #include "../radix/src/collider_component.h"
 #include "../radix/src/animated_sprite_component.h"
+#include "../radix/src/bounding_box_component.h"
 
 Entity* create_player(const Vector2<float>& position)
 {
@@ -35,7 +36,8 @@ Entity* create_player(const Vector2<float>& position)
 	player->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(position.x, position.y), Vector2<float>(1, 1), 0);
 	player->add_component<AnimatedSpriteComponent>(false, SDL_FLIP_NONE, CHOPPER_TEXTURE_ID, PLAYER_DOWN, chopper_animations);
 	player->add_component<PlayerScriptComponent>();
-	player->add_component<ColliderComponent>(PLAYER_COLLIDER_TAG, Vector2<float>(32, 32));
+	//player->add_component<ColliderComponent>(PLAYER_COLLIDER_TAG, Vector2<float>(32, 32));
+	player->add_component<BoundingBoxComponent>(PLAYER_COLLIDER_TAG);
 
 	return player;
 }
