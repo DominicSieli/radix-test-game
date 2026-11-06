@@ -29,6 +29,7 @@
 #include "../radix/src/collision_manager.h"
 #include "../radix/src/collider_component.h"
 #include "../radix/src/transform_component.h"
+#include "../radix/src/bounding_box_component.h"
 #include "../radix/src/static_sprite_component.h"
 #include "../radix/src/animated_sprite_component.h"
 
@@ -99,6 +100,7 @@ void Game::load_level(const unsigned int& level_number)
 	tank->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(250, 495), Vector2<float>(1, 1), 0);
 	tank->add_component<StaticSpriteComponent>(false, SDL_FLIP_NONE, TANK_TEXTURE_ID);
 	tank->add_component<ColliderComponent>(ENEMY_COLLIDER_TAG, Vector2<float>(32, 32));
+	tank->add_component<BoundingBoxComponent>(ENEMY_COLLIDER_TAG, SDL_Color{255,255,255,255});
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
 	tank_transform->translate(Vector2<float>(10000, 0));
 
@@ -113,6 +115,7 @@ void Game::load_level(const unsigned int& level_number)
 	heliport->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(470, 420), Vector2<float>(1, 1), 0);
 	heliport->add_component<StaticSpriteComponent>(false, SDL_FLIP_NONE, HELIPORT_TEXTURE_ID);
 	heliport->add_component<ColliderComponent>(HELIPORT_COLLIDER_TAG, Vector2<float>(32, 32));
+	heliport->add_component<BoundingBoxComponent>(HELIPORT_COLLIDER_TAG, SDL_Color{255,255,255,255});
 
 	std::unordered_map<unsigned int, Animation> radar_animation;
 
@@ -204,7 +207,7 @@ void Game::check_collisions()
 	collisions.push_back(player_heliport_collision);
 	collisions.push_back(player_enemy_projectile_collision);
 
-	unsigned int collision_type = collision_manager.check_collisions(collisions, NO_COLLISION);
+	unsigned int collision_type = collision_manager.check_rect_collisions(collisions, NO_COLLISION);
 
 	if(collision_type == PLAYER_ENEMY_COLLISION)
 	{
