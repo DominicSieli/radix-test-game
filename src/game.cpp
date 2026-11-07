@@ -148,7 +148,6 @@ void Game::update()
 
 	entity_manager.update(Game::time_manager.get_delta_time());
 	update_camera_movement();
-	check_collisions();
 
 	if(Game::input_manager.get_event().type == SDL_EVENT_KEY_DOWN)
 	{
@@ -179,6 +178,8 @@ void Game::update()
 		player->get_component<AnimatedSpriteComponent>()->unpause();
 		radar->get_component<AnimatedSpriteComponent>()->unpause();
 	}
+
+	check_collisions();
 }
 
 void Game::render()
@@ -207,7 +208,7 @@ void Game::check_collisions()
 	collisions.push_back(player_heliport_collision);
 	collisions.push_back(player_enemy_projectile_collision);
 
-	unsigned int collision_type = collision_manager.check_rect_collisions(collisions, NO_COLLISION);
+	unsigned int collision_type = collision_manager.check_geometry_collisions(collisions, NO_COLLISION);
 
 	if(collision_type == PLAYER_ENEMY_COLLISION)
 	{

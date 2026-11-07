@@ -59,6 +59,32 @@ void PlayerScriptComponent::update(const float&)
 		}
 	}
 
+	if(Game::input_manager.keyboard_state[SDL_SCANCODE_G])
+	{
+		if(!Game::state_manager.is_paused())
+		{
+			transform_component->scaling(Vector2<float>(0.10f, 0.10f));
+		}
+	}
+
+	if(Game::input_manager.keyboard_state[SDL_SCANCODE_R])
+	{
+		if(!Game::state_manager.is_paused())
+		{
+			transform_component->rotate(5.00f);
+		}
+	}
+
+
+	if(Game::input_manager.keyboard_state[SDL_SCANCODE_Z])
+	{
+		if(!Game::state_manager.is_paused())
+		{
+			transform_component->set_rotation(0.00f);
+			transform_component->set_scale(Vector2<float>(1.00f, 1.00f));
+		}
+	}
+
 	if(Game::input_manager.get_event().key.key == SDLK_SPACE)
 	{}
 
