@@ -27,7 +27,6 @@
 #include "../radix/src/entity_manager.h"
 #include "../radix/src/render_manager.h"
 #include "../radix/src/collision_manager.h"
-#include "../radix/src/collider_component.h"
 #include "../radix/src/transform_component.h"
 #include "../radix/src/polygon_rect_component.h"
 #include "../radix/src/static_sprite_component.h"
@@ -98,24 +97,15 @@ void Game::load_level(const unsigned int& level_number)
 
 	Entity* tank = entity_manager.create_entity(TANK_ID, 1);
 	tank->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(250, 495), Vector2<float>(1, 1), 0);
-	tank->add_component<StaticSpriteComponent>(false, SDL_FLIP_NONE, TANK_TEXTURE_ID);
-	tank->add_component<ColliderComponent>(ENEMY_COLLIDER_TAG, Vector2<float>(32, 32));
 	tank->add_component<PolygonRectComponent>(ENEMY_COLLIDER_TAG, SDL_Color{255,255,255,255}, true);
+	tank->add_component<StaticSpriteComponent>(false, TANK_TEXTURE_ID);
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
 	tank_transform->translate(Vector2<float>(10000, 0));
 
-	Entity* bullet = entity_manager.create_entity(ENEMY_BULLET_ID, 1);
-	bullet->add_component<TransformComponent>(Vector2<float>(4, 4), Vector2<float>(tank_transform->get_position().x+16, tank_transform->get_position().y+16), Vector2<float>(1, 1), 0);
-	bullet->add_component<StaticSpriteComponent>(false, SDL_FLIP_NONE, ENEMY_BULLET_TEXTURE_ID);
-	bullet->add_component<ColliderComponent>(ENEMY_BULLET_COLLIDER_TAG, Vector2<float>(4, 4));
-	TransformComponent* bullet_transform = bullet->get_component<TransformComponent>();
-	bullet_transform->translate(Vector2<float>(2000, 0));
-
 	Entity* heliport = entity_manager.create_entity(HELIPORT_ID, 1);
 	heliport->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(470, 420), Vector2<float>(1, 1), 0);
-	heliport->add_component<StaticSpriteComponent>(false, SDL_FLIP_NONE, HELIPORT_TEXTURE_ID);
-	heliport->add_component<ColliderComponent>(HELIPORT_COLLIDER_TAG, Vector2<float>(32, 32));
 	heliport->add_component<PolygonRectComponent>(HELIPORT_COLLIDER_TAG, SDL_Color{255,255,255,255}, true);
+	heliport->add_component<StaticSpriteComponent>(false, HELIPORT_TEXTURE_ID);
 
 	std::unordered_map<unsigned int, Animation> radar_animation;
 
