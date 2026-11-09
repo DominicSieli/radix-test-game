@@ -98,14 +98,15 @@ void Game::load_level(const unsigned int& level_number)
 	Entity* tank = entity_manager.create_entity(TANK_ID, 1);
 	tank->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(250, 495), Vector2<float>(1, 1), 0);
 	tank->add_component<PolygonRectComponent>(ENEMY_COLLIDER_TAG, SDL_Color{255,255,255,255}, true);
-	tank->add_component<StaticSpriteComponent>(false, TANK_TEXTURE_ID);
+	tank->add_component<StaticSpriteComponent>(false, SDL_FLIP_NONE, TANK_TEXTURE_ID);
+
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
 	tank_transform->translate(Vector2<float>(10000, 0));
 
 	Entity* heliport = entity_manager.create_entity(HELIPORT_ID, 1);
 	heliport->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(470, 420), Vector2<float>(1, 1), 0);
 	heliport->add_component<PolygonRectComponent>(HELIPORT_COLLIDER_TAG, SDL_Color{255,255,255,255}, true);
-	heliport->add_component<StaticSpriteComponent>(false, HELIPORT_TEXTURE_ID);
+	heliport->add_component<StaticSpriteComponent>(false, SDL_FLIP_NONE, HELIPORT_TEXTURE_ID);
 
 	std::unordered_map<unsigned int, Animation> radar_animation;
 
@@ -114,6 +115,7 @@ void Game::load_level(const unsigned int& level_number)
 
 	radar = entity_manager.create_entity(RADAR_ID, 9);
 	radar->add_component<TransformComponent>(Vector2<float>(64, 64), Vector2<float>(RESOLUTION_X - 80, 16), Vector2<float>(1, 1), 0);
+	radar->add_component<PolygonRectComponent>(PLAYER_COLLIDER_TAG, SDL_Color{255,255,255,255}, true);
 	radar->add_component<AnimatedSpriteComponent>(true, SDL_FLIP_NONE, RADAR_TEXTURE_ID, 0, radar_animation);
 }
 
