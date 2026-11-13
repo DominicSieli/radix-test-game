@@ -1,5 +1,5 @@
-#ifndef ENTITY_FACTORY_H
-#define ENTITY_FACTORY_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "../radix/src/entity.h"
 #include "../radix/src/vectors.h"

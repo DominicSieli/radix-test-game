@@ -15,7 +15,7 @@ PlayerScriptComponent::~PlayerScriptComponent()
 
 void PlayerScriptComponent::initialize()
 {
-	animated_sprite_component = get_entity()->get_component<AnimatedSpriteComponent>();
+	sprite_component = get_entity()->get_component<SpriteComponent>();
 	transform_component = get_entity()->get_component<TransformComponent>();
 }
 
@@ -28,7 +28,7 @@ void PlayerScriptComponent::update(const float&)
 		if(!Game::state_manager.is_paused())
 		{
 			transform_component->translate(Vector2<float>(0.00f, -speed));
-			animated_sprite_component->play(PLAYER_UP);
+			sprite_component->play(PLAYER_UP);
 		}
 	}
 
@@ -37,7 +37,7 @@ void PlayerScriptComponent::update(const float&)
 		if(!Game::state_manager.is_paused())
 		{
 			transform_component->translate(Vector2<float>(0.00f, speed));
-			animated_sprite_component->play(PLAYER_DOWN);
+			sprite_component->play(PLAYER_DOWN);
 		}
 	}
 
@@ -46,7 +46,7 @@ void PlayerScriptComponent::update(const float&)
 		if(!Game::state_manager.is_paused())
 		{
 			transform_component->translate(Vector2<float>(-speed, 0.00f));
-			animated_sprite_component->play(PLAYER_LEFT);
+			sprite_component->play(PLAYER_LEFT);
 		}
 	}
 
@@ -55,7 +55,7 @@ void PlayerScriptComponent::update(const float&)
 		if(!Game::state_manager.is_paused())
 		{
 			transform_component->translate(Vector2<float>(speed, 0.00f));
-			animated_sprite_component->play(PLAYER_RIGHT);
+			sprite_component->play(PLAYER_RIGHT);
 		}
 	}
 

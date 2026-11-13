@@ -9,7 +9,7 @@
 
 #include "../radix/src/game.h"
 #include "../radix/src/animation.h"
-#include "../radix/src/animated_sprite_component.h"
+#include "../radix/src/sprite_component.h"
 #include "../radix/src/polygon_rect_component.h"
 
 Entity* create_player(const Vector2<float>& position)
@@ -33,8 +33,8 @@ Entity* create_player(const Vector2<float>& position)
 	chopper_animations.try_emplace(PLAYER_RIGHT, right);
 
 	player->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(position.x, position.y), Vector2<float>(1, 1), 0);
-	player->add_component<PolygonRectComponent>(PLAYER_COLLIDER_TAG, SDL_Color{255,255,255,255}, true);
-	player->add_component<AnimatedSpriteComponent>(false, SDL_FLIP_NONE, CHOPPER_TEXTURE_ID, PLAYER_DOWN, chopper_animations);
+	player->add_component<PolygonRectComponent>(PLAYER_COLLIDER_TAG, SDL_Color{255,255,255,255}, true, false);
+	player->add_component<SpriteComponent>(CHOPPER_TEXTURE_ID, PLAYER_DOWN, chopper_animations);
 	player->add_component<PlayerScriptComponent>();
 
 	return player;

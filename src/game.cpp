@@ -26,14 +26,15 @@
 #include "../radix/src/text_component.h"
 #include "../radix/src/entity_manager.h"
 #include "../radix/src/render_manager.h"
+#include "../radix/src/sprite_component.h"
 #include "../radix/src/collision_manager.h"
 #include "../radix/src/transform_component.h"
 #include "../radix/src/polygon_rect_component.h"
-#include "../radix/src/static_sprite_component.h"
-#include "../radix/src/animated_sprite_component.h"
 
 using namespace Radix;
 
+Entity* tank;
+Entity* heliport;
 Entity* radar;
 Entity* player;
 TileMap* tile_map;
@@ -95,18 +96,18 @@ void Game::load_level(const unsigned int& level_number)
 	fps_display = entity_manager.create_entity(HUD_ID, 9);
 	fps_display->add_component<TextComponent>(Vector2<float>(10, 10), fps_text, CHARRIOT_ID, WHITE);
 
-	Entity* tank = entity_manager.create_entity(TANK_ID, 1);
-	tank->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(250, 495), Vector2<float>(1, 1), 0);
-	tank->add_component<PolygonRectComponent>(ENEMY_COLLIDER_TAG, SDL_Color{255,255,255,255}, true);
-	tank->add_component<StaticSpriteComponent>(false, SDL_FLIP_NONE, TANK_TEXTURE_ID);
+	tank = entity_manager.create_entity(TANK_ID, 1);
+	tank->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(800, 800), Vector2<float>(1, 1), 0);
+	tank->add_component<PolygonRectComponent>(ENEMY_COLLIDER_TAG, SDL_Color{255,255,255,255}, true, false);
+	tank->add_component<SpriteComponent>(TANK_TEXTURE_ID);
 
 	TransformComponent* tank_transform = tank->get_component<TransformComponent>();
 	tank_transform->translate(Vector2<float>(10000, 0));
 
-	Entity* heliport = entity_manager.create_entity(HELIPORT_ID, 1);
+	heliport = entity_manager.create_entity(HELIPORT_ID, 1);
 	heliport->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(470, 420), Vector2<float>(1, 1), 0);
-	heliport->add_component<PolygonRectComponent>(HELIPORT_COLLIDER_TAG, SDL_Color{255,255,255,255}, true);
-	heliport->add_component<StaticSpriteComponent>(false, SDL_FLIP_NONE, HELIPORT_TEXTURE_ID);
+	heliport->add_component<PolygonRectComponent>(HELIPORT_COLLIDER_TAG, SDL_Color{255,255,255,255}, true, false);
+	heliport->add_component<SpriteComponent>(HELIPORT_TEXTURE_ID);
 
 	std::unordered_map<unsigned int, Animation> radar_animation;
 
@@ -115,8 +116,8 @@ void Game::load_level(const unsigned int& level_number)
 
 	radar = entity_manager.create_entity(RADAR_ID, 9);
 	radar->add_component<TransformComponent>(Vector2<float>(64, 64), Vector2<float>(RESOLUTION_X - 80, 16), Vector2<float>(1, 1), 0);
-	radar->add_component<PolygonRectComponent>(PLAYER_COLLIDER_TAG, SDL_Color{255,255,255,255}, true);
-	radar->add_component<AnimatedSpriteComponent>(true, SDL_FLIP_NONE, RADAR_TEXTURE_ID, 0, radar_animation);
+	radar->add_component<PolygonRectComponent>(PLAYER_COLLIDER_TAG, SDL_Color{255,255,255,255}, true, true);
+	radar->add_component<SpriteComponent>(RADAR_TEXTURE_ID, 0, radar_animation);
 }
 
 void Game::input()
@@ -159,16 +160,16 @@ void Game::update()
 	if(Game::state_manager.is_paused())
 	{
 		player->get_component<TransformComponent>()->set_inactive();
-		player->get_component<AnimatedSpriteComponent>()->pause();
-		radar->get_component<AnimatedSpriteComponent>()->pause();
+		player->get_component<SpriteComponent>()->pause();
+		radar->get_component<SpriteComponent>()->pause();
 	}
 
 	if(!Game::state_manager.is_paused())
 	{
 
 		player->get_component<TransformComponent>()->set_active();
-		player->get_component<AnimatedSpriteComponent>()->unpause();
-		radar->get_component<AnimatedSpriteComponent>()->unpause();
+		player->get_component<SpriteComponent>()->unpause();
+		radar->get_component<SpriteComponent>()->unpause();
 	}
 
 	check_collisions();
