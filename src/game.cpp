@@ -21,11 +21,12 @@
 #include "../radix/src/collision.h"
 #include "../radix/src/time_manager.h"
 #include "../radix/src/audio_manager.h"
-#include "../radix/src/asset_manager.h"
+#include "../radix/src/font_manager.h"
 #include "../radix/src/window_manager.h"
 #include "../radix/src/text_component.h"
 #include "../radix/src/entity_manager.h"
 #include "../radix/src/render_manager.h"
+#include "../radix/src/texture_manager.h"
 #include "../radix/src/sprite_component.h"
 #include "../radix/src/collision_manager.h"
 #include "../radix/src/transform_component.h"
@@ -80,12 +81,12 @@ Game::~Game()
 
 void Game::load_level(const unsigned int& level_number)
 {
-	asset_manager.add_font(CHARRIOT_ID, CHARRIOT_TTF_PATH, 24);
-	asset_manager.add_texture(TANK_TEXTURE_ID, TANK_PNG_PATH);
-	asset_manager.add_texture(RADAR_TEXTURE_ID, RADAR_PNG_PATH);
-	asset_manager.add_texture(HELIPORT_TEXTURE_ID, HELIPORT_PNG_PATH);
-	asset_manager.add_texture(JUNGLE_MAP_TEXTURE_ID, JUNGLE_PNG_PATH);
-	asset_manager.add_texture(ENEMY_BULLET_TEXTURE_ID, BULLET_PNG_PATH);
+	font_manager.add_font(CHARRIOT_ID, CHARRIOT_TTF_PATH, 24);
+	texture_manager.add_texture(TANK_TEXTURE_ID, TANK_PNG_PATH);
+	texture_manager.add_texture(RADAR_TEXTURE_ID, RADAR_PNG_PATH);
+	texture_manager.add_texture(HELIPORT_TEXTURE_ID, HELIPORT_PNG_PATH);
+	texture_manager.add_texture(JUNGLE_MAP_TEXTURE_ID, JUNGLE_PNG_PATH);
+	texture_manager.add_texture(ENEMY_BULLET_TEXTURE_ID, BULLET_PNG_PATH);
 
 	player = create_player(Vector2<float>(240, 110));
 
@@ -236,6 +237,6 @@ void Game::process_next_level(const unsigned int& level_number)
 
 void Game::destroy()
 {
-	SDL_DestroyWindow(window_manager.get_window());
+	window_manager.destroy();
 	SDL_Quit();
 }

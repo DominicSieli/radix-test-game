@@ -16,9 +16,9 @@ Entity* create_player(const Vector2<float>& position)
 {
 	Entity* player = Game::entity_manager.create_entity(PLAYER_ID, 2);
 
-	const char* const CHOPPER_PNG_PATH = "./assets/images/chopper-spritesheet.png";
+	const char* const CHOPPER_PNG_PATH = "./assets/textures/chopper-spritesheet.png";
 
-	Game::asset_manager.add_texture(CHOPPER_TEXTURE_ID, CHOPPER_PNG_PATH);
+	Game::texture_manager.add_texture(CHOPPER_TEXTURE_ID, CHOPPER_PNG_PATH);
 
 	std::unordered_map<unsigned int, Animation> chopper_animations;
 
