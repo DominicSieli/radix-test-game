@@ -90,7 +90,7 @@ void Game::load_level(const unsigned int& level_number)
 
 	player = create_player(Vector2<float>(240, 110));
 
-	tile_map = new TileMap(JUNGLE_MAP_TEXTURE_ID, Vector2<int>(25, 20), 32, 2);
+	tile_map = new TileMap(JUNGLE_MAP_TEXTURE_ID, Vector2<unsigned int>(25, 20), 32, 2);
 	tile_map->load_map(JUNGLE_MAP_PATH, TILE_ID, 0);
 
 	std::string fps_text = "FPS: " + std::to_string(time_manager.get_fps());
