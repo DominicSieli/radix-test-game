@@ -95,8 +95,7 @@ void Game::load_level(const unsigned int& level_number)
 
 	std::string fps_text = "FPS: " + std::to_string(time_manager.get_fps());
 	fps_display = entity_manager.create_entity(HUD_ID, 9);
-	fps_display->add_component<TransformComponent>(Vector2<float>(0, 0), Vector2<float>(10, 10), Vector2<float>(1, 1), 0);
-	fps_display->add_component<TextComponent>(fps_text, CHARRIOT_ID, WHITE, false);
+	fps_display->add_component<TextComponent>(fps_text, CHARRIOT_ID, WHITE, SDL_FRect{10,10,0,0}, true);
 
 	tank = entity_manager.create_entity(TANK_ID, 1);
 	tank->add_component<TransformComponent>(Vector2<float>(32, 32), Vector2<float>(800, 800), Vector2<float>(1, 1), 0);
@@ -118,7 +117,7 @@ void Game::load_level(const unsigned int& level_number)
 
 	radar = entity_manager.create_entity(RADAR_ID, 9);
 	radar->add_component<TransformComponent>(Vector2<float>(64, 64), Vector2<float>(RESOLUTION_X - 80, 16), Vector2<float>(1, 1), 0);
-	radar->add_component<PolygonRectComponent>(PLAYER_COLLIDER_TAG, SDL_Color{255,255,255,255}, true, false);
+	radar->add_component<PolygonRectComponent>(PLAYER_COLLIDER_TAG, SDL_Color{255,255,255,255}, true, true);
 	radar->add_component<SpriteComponent>(RADAR_TEXTURE_ID, 0, radar_animation);
 }
 
@@ -141,7 +140,6 @@ void Game::update()
 
 	TextComponent* text_component = fps_display->get_component<TextComponent>();
 	text_component->set_text("FPS: " + std::to_string(Game::time_manager.get_fps()));
-	text_component->update_text();
 
 	entity_manager.update(Game::time_manager.get_delta_time());
 	update_camera_movement();
